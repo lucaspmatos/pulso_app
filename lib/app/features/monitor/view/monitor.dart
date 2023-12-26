@@ -4,6 +4,8 @@ import 'package:heart_bpm/heart_bpm.dart';
 
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
+import 'package:pulso_app/app/features/monitor/controller/monitor_controller.dart';
 
 class Monitor extends StatefulWidget {
   const Monitor({super.key});
@@ -19,15 +21,36 @@ class _MonitorState extends State<Monitor> {
 
   bool isBPMEnabled = false;
   Widget? dialog;
+  late MonitorController _controller;
+
+  _MonitorState() {
+    _controller = MonitorControllerImpl();
+  }
 
   void _toggleBPM() {
     setState(() => isBPMEnabled ? isBPMEnabled = false : isBPMEnabled = true);
+
+    if (!isBPMEnabled && bpmValues.isNotEmpty) {
+      _controller.calcBPM(bpmValues);
+    }
   }
 
   void _treatData(SensorValue value) {
     setState(() {
       if (data.length >= 100) data.removeAt(0);
       data.add(value);
+    });
+  }
+
+  void _treatBPM(int value) {
+    setState(() {
+      if (bpmValues.length >= 100) bpmValues.removeAt(0);
+      bpmValues.add(
+        SensorValue(
+          value: value.toDouble(),
+          time: DateTime.now(),
+        ),
+      );
     });
   }
 
@@ -51,15 +74,7 @@ class _MonitorState extends State<Monitor> {
                   showTextValues: true,
                   borderRadius: 25,
                   onRawData: _treatData,
-                  onBPM: (value) => setState(() {
-                    if (bpmValues.length >= 100) bpmValues.removeAt(0);
-                    bpmValues.add(
-                      SensorValue(
-                        value: value.toDouble(),
-                        time: DateTime.now(),
-                      ),
-                    );
-                  }),
+                  onBPM: _treatBPM,
                 )
               : const SizedBox(),
           isBPMEnabled && data.isNotEmpty
