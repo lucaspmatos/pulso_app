@@ -4,6 +4,7 @@ import 'package:heart_bpm/heart_bpm.dart';
 
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 import 'package:pulso_app/app/features/monitor/controller/monitor_controller.dart';
 
@@ -59,7 +60,7 @@ class _MonitorState extends State<Monitor> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: DrawerAppBar(
-        title: Texts.appTitle,
+        title: Texts.monitor,
         context: context,
       ),
       drawer: const AppDrawer(),
@@ -75,13 +76,6 @@ class _MonitorState extends State<Monitor> {
                   borderRadius: 25,
                   onRawData: _treatData,
                   onBPM: _treatBPM,
-                )
-              : const SizedBox(),
-          isBPMEnabled && data.isNotEmpty
-              ? Container(
-                  decoration: BoxDecoration(border: Border.all()),
-                  height: 180,
-                  child: BPMChart(data),
                 )
               : const SizedBox(),
           isBPMEnabled && bpmValues.isNotEmpty

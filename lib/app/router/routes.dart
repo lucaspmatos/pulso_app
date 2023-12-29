@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:pulso_app/app/router/pages.dart';
 import 'package:pulso_app/app/core/constants/texts.dart';
-
-import 'package:pulso_app/app/features/monitor/view/monitor.dart';
-import 'package:pulso_app/app/features/splash_screen/splash_screen.dart';
 
 class Routes {
   static final mapRouter = {
     Texts.initialRoute: (context) => const SplashScreen(),
-    Texts.monitor: (context) => const Monitor(),
+    Texts.monitorRoute: (context) => const Monitor(),
+    Texts.contactsRoute: (context) => const Contacts(),
   };
 
-  static void homePageRoute(BuildContext context) =>
-      Navigator.pushReplacementNamed(context, Texts.monitor);
+  static void splashScreenRoute(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, Texts.initialRoute);
+
+  static void monitorRoute(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, Texts.monitorRoute);
+
+  static void contactsRoute(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, Texts.contactsRoute);
 }

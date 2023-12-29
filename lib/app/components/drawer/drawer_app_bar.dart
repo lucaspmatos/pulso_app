@@ -24,7 +24,7 @@ class DrawerAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ColorConstants.white,
-      centerTitle: false,
+      centerTitle: true,
       title: Text(
         title,
         style: getTextTheme(context).displaySmall?.copyWith(fontSize: 22),
