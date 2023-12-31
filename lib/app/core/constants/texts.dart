@@ -12,6 +12,18 @@ class Texts {
   static const String history = "Histórico";
   static const String contacts = "Contatos";
 
+  // Monitor
+  static const String measureBPM = "Medir BPM";
+  static const String stopMeasurement = "Parar medição";
+  static const String heartbeats = "Batimentos cardíacos";
+  static const String systolicPressure = "Pressão sistólica";
+  static const String diastolicPressure = "Pressão diastólica";
+  static const String bodyHeat = "TEMPERATURA CORPORAL";
+  static const String pressureMeasure = "mmHg";
+  static const String bodyHeatTopic = "temp";
+  static const String systolicTopic = "systolic";
+  static const String diastolicTopic = "diastolic";
+
   // Contacts
   static const String unavailable = "Indisponível";
   static const String loadingContacts = "Carregando seus contatos";
