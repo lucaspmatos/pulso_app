@@ -13,7 +13,7 @@ class MonitorControllerImpl implements MonitorController {
 
   MonitorControllerImpl(this._view);
 
-  MqttServerClient client = MqttServerClient.withPort('', '', 1883);
+  MqttServerClient client = MqttServerClient.withPort('54.147.89.192', '', 1883);
 
   _changeSensorValues(String topic, String payload) {
     switch (topic) {
@@ -66,6 +66,12 @@ class MonitorControllerImpl implements MonitorController {
         print('');
       });
     }
+  }
+
+  @override
+  stopMeasurement() {
+    client.disconnect();
+    _view.setButtonValue();
   }
 
   _sendWhatsApp(int avg) async {

@@ -65,18 +65,21 @@ class _MonitorState extends State<Monitor> implements MonitorView {
     });
 
     Timer(const Duration(seconds: 15), () {
-      setState(() => isBPMEnabled = false);
+      _controller.stopMeasurement();
     });
   }
+
+  @override
+  void setButtonValue() => setState(() => isBPMEnabled = false);
 
   @override
   setBodyHeat(String value) => setState(() => _bodyHeat = value);
 
   @override
-  setDiastolicPressure(String value) => setState(() => _systolic = value);
+  setDiastolicPressure(String value) => setState(() => _diastolic = value);
 
   @override
-  setSystolicPressure(String value) => setState(() => _diastolic = value);
+  setSystolicPressure(String value) => setState(() => _systolic = value);
 
   TextStyle? _getTextStyleCard(double? fontSize) {
     return getTextTheme(context).displayLarge?.copyWith(
