@@ -9,11 +9,30 @@ import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 
 class MonitorControllerImpl implements MonitorController {
-  MonitorView _view;
-
+  final MonitorView _view;
   MonitorControllerImpl(this._view);
 
-  MqttServerClient client = MqttServerClient.withPort('54.147.89.192', '', 1883);
+  MqttServerClient client =
+      MqttServerClient.withPort('54.147.89.192', '', 1883);
+
+  List<String> topics = [
+    Texts.bodyHeatTopic,
+    Texts.systolicTopic,
+    Texts.diastolicTopic
+  ];
+
+  String _setWhatsAppUrl(String text) {
+    return "https://api.callmebot.com/whatsapp.php?phone=[]&text=$text&apikey=[]";
+  }
+
+  _sendWhatsApp(int avg) async {
+    if (avg > 140) {
+      var url = _setWhatsAppUrl("");
+      await canLaunchUrl(Uri.parse(url))
+          ? await launchUrl(Uri.parse(url))
+          : throw 'Could not launch $url';
+    }
+  }
 
   _changeSensorValues(String topic, String payload) {
     switch (topic) {
@@ -45,24 +64,17 @@ class MonitorControllerImpl implements MonitorController {
     }
 
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
-      client.subscribe(Texts.bodyHeatTopic, MqttQos.atLeastOnce);
-      client.subscribe(Texts.systolicTopic, MqttQos.atLeastOnce);
-      client.subscribe(Texts.diastolicTopic, MqttQos.atLeastOnce);
+      for (var topic in topics) {
+        client.subscribe(topic, MqttQos.atLeastOnce);
+      }
 
       client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
         final recMess = c![0].payload as MqttPublishMessage;
         final pt =
-        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
+            MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
         _changeSensorValues(c[0].topic, pt);
 
-        /// The above may seem a little convoluted for users only interested in the
-        /// payload, some users however may be interested in the received publish message,
-        /// lets not constrain ourselves yet until the package has been in the wild
-        /// for a while.
-        /// The payload is a byte buffer, this will be specific to the topic
-        print(
-            'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+        print('EXAMPLE:: topic is <${c[0].topic}>, payload is <-- $pt -->');
         print('');
       });
     }
@@ -74,25 +86,11 @@ class MonitorControllerImpl implements MonitorController {
     _view.setButtonValue();
   }
 
-  _sendWhatsApp(int avg) async {
-    if (avg > 10) {
-      var whatsappUrl =
-          "https://api.callmebot.com/whatsapp.php?phone=[]&text=This+is+a+test+from+CallMeBot&apikey=[]";
-      if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
-        await launchUrl(Uri.parse(whatsappUrl));
-      } else {
-        throw 'Could not launch $whatsappUrl';
-      }
-    }
-  }
-
   @override
   void calcBPM(List<SensorValue> bpmList) {
-    if (bpmList.isNotEmpty) {
-      int sum = 0;
-      bpmList.forEach((e) => sum += e.value.toInt());
-      int avg = sum ~/ bpmList.length;
-      _sendWhatsApp(avg);
-    }
+    int sum = 0;
+    if (bpmList.isNotEmpty) bpmList.forEach((e) => sum += e.value.toInt());
+    int avg = sum ~/ bpmList.length;
+    _sendWhatsApp(avg);
   }
 }
