@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 
 import 'package:pulso_app/app/components/components.dart';
-import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
+import 'package:pulso_app/app/core/constants/constants.dart';
 
+import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 import 'package:pulso_app/app/features/monitor/controller/monitor_controller.dart';
 
@@ -65,7 +66,15 @@ class _MonitorState extends State<Monitor> implements MonitorView {
     });
 
     Timer(const Duration(seconds: 15), () {
-      _controller.stopMeasurement();
+      _controller.stopMeasurement(
+        CardiacHistory(
+          userId: 1,
+          bpm: _bpm,
+          systolicPressure: int.tryParse(_systolic),
+          diastolicPressure: int.tryParse(_diastolic),
+          bodyHeat: double.tryParse(_bodyHeat),
+        )
+      );
     });
   }
 
@@ -228,7 +237,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                       ),
                 ),
                 trailing: Text(
-                  "$_bodyHeat° C",
+                  "$_bodyHeat${Texts.celsius}",
                   style: getTextTheme(context).displayLarge?.copyWith(
                         color: ColorConstants.white,
                         fontWeight: FontWeight.w100,

@@ -20,7 +20,7 @@ class _ContactsState extends State<Contacts> implements ContactsView {
   List<Contact>? contacts;
 
   _ContactsState() {
-    _controller = ContractsControllerImpl(this);
+    _controller = ContactsControllerImpl(this);
   }
 
   @override

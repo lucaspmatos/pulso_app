@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
               DrawerItem(
                 icon: Icons.history,
                 text: Texts.history,
-                onTap: () => Routes.monitorRoute(context),
+                onTap: () => Routes.historyRoute(context),
               ),
               const Divider(color: ColorConstants.grey),
               DrawerItem(

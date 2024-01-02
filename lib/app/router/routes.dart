@@ -7,6 +7,7 @@ class Routes {
   static final mapRouter = {
     Texts.initialRoute: (context) => const SplashScreen(),
     Texts.monitorRoute: (context) => const Monitor(),
+    Texts.historyRoute: (context) => const History(),
     Texts.contactsRoute: (context) => const Contacts(),
   };
 
@@ -15,6 +16,9 @@ class Routes {
 
   static void monitorRoute(BuildContext context) =>
       Navigator.pushReplacementNamed(context, Texts.monitorRoute);
+
+  static void historyRoute(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, Texts.historyRoute);
 
   static void contactsRoute(BuildContext context) =>
       Navigator.pushReplacementNamed(context, Texts.contactsRoute);

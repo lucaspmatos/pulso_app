@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:heart_bpm/heart_bpm.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
+import 'package:pulso_app/app/api/history_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 
@@ -20,6 +23,8 @@ class MonitorControllerImpl implements MonitorController {
     Texts.systolicTopic,
     Texts.diastolicTopic
   ];
+
+  int bpmAvg = 0;
 
   String _setWhatsAppUrl(String text) {
     return "https://api.callmebot.com/whatsapp.php?phone=[]&text=$text&apikey=[]";
@@ -44,6 +49,14 @@ class MonitorControllerImpl implements MonitorController {
         return _view.setDiastolicPressure(payload);
       default:
         return;
+    }
+  }
+
+  _saveHistory(CardiacHistory newHistory) async {
+    try {
+      await HistoryService.postHistory(newHistory);
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Erro ao salvar histórico!');
     }
   }
 
@@ -81,8 +94,9 @@ class MonitorControllerImpl implements MonitorController {
   }
 
   @override
-  stopMeasurement() {
+  stopMeasurement(CardiacHistory history) {
     client.disconnect();
+    _saveHistory(history);
     _view.setButtonValue();
   }
 
@@ -90,7 +104,7 @@ class MonitorControllerImpl implements MonitorController {
   void calcBPM(List<SensorValue> bpmList) {
     int sum = 0;
     if (bpmList.isNotEmpty) bpmList.forEach((e) => sum += e.value.toInt());
-    int avg = sum ~/ bpmList.length;
-    _sendWhatsApp(avg);
+    bpmAvg = sum ~/ bpmList.length;
+    _sendWhatsApp(bpmAvg);
   }
 }

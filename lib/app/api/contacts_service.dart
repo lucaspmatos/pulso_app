@@ -19,10 +19,8 @@ class ContactService {
   }
 
   static Future<void> deleteContact(int id) async {
-    // Fazer uma chamada à API para excluir o contato
     final response = await http.delete(Uri.parse('${Texts.baseUrl}/contact/$id'));
 
-    // Se a chamada foi bem-sucedida, atualizar o controlador
     if (response.statusCode == 200) {
       return;
     } else {

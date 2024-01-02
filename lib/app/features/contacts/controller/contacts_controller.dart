@@ -1,15 +1,14 @@
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:pulso_app/app/api/contacts_service.dart';
-import 'package:pulso_app/app/core/constants/constants.dart';
 
 import 'package:pulso_app/app/features/contacts/model/contact.dart';
 import 'package:pulso_app/app/features/contacts/contract/contacts_contract.dart';
 
-class ContractsControllerImpl implements ContactsController {
-  late final ContactsView _view;
+class ContactsControllerImpl implements ContactsController {
+  final ContactsView _view;
 
-  ContractsControllerImpl(this._view);
+  ContactsControllerImpl(this._view);
 
   Future<void> _loadContacts() async {
     try {

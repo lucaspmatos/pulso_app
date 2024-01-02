@@ -12,6 +12,11 @@ class Texts {
   static const String history = "Histórico";
   static const String contacts = "Contatos";
 
+  // Contacts
+  static const String unavailable = "Indisponível";
+  static const String loadingContacts = "Carregando seus contatos";
+  static const String contactsError = "Não possível acessar a lista de contatos. Tente mais tarde.";
+
   // Monitor
   static const String measureBPM = "Medir BPM";
   static const String stopMeasurement = "Parar medição";
@@ -23,11 +28,12 @@ class Texts {
   static const String bodyHeatTopic = "temp";
   static const String systolicTopic = "systolic";
   static const String diastolicTopic = "diastolic";
+  static const String celsius = "º C";
 
-  // Contacts
-  static const String unavailable = "Indisponível";
-  static const String loadingContacts = "Carregando seus contatos";
-  static const String contactsError = "Não possível acessar a lista de contatos. Tente mais tarde.";
+  // History
+  static const String noData = "--";
+  static const String loadingHistory = "Carregando seu histórico";
+  static const String historyError = "Não possível acessar o histórico. Tente mais tarde.";
 }
 
 class Fonts {
