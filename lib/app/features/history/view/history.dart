@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:pulso_app/app/components/components.dart';
@@ -71,7 +72,7 @@ class _HistoryState extends State<History> implements HistoryView {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: DrawerAppBar(
-        title: Texts.contacts,
+        title: Texts.history,
         context: context,
       ),
       drawer: const AppDrawer(),

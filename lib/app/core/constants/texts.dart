@@ -28,10 +28,13 @@ class Texts {
   static const String bodyHeatTopic = "temp";
   static const String systolicTopic = "systolic";
   static const String diastolicTopic = "diastolic";
-  static const String celsius = "º C";
+  static const String celsius = "ºC";
 
   // History
+  static const String bpm = "bpm";
   static const String noData = "--";
+  static const String heartPressure = "Pressão arterial";
+  static const String temperature = "Temperatura";
   static const String loadingHistory = "Carregando seu histórico";
   static const String historyError = "Não possível acessar o histórico. Tente mais tarde.";
 }

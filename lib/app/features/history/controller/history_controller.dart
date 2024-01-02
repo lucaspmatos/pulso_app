@@ -6,7 +6,7 @@ import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/history/contract/history_contract.dart';
 
 class HistoryControllerImpl implements HistoryController {
-  late final HistoryView _view;
+  final HistoryView _view;
 
   HistoryControllerImpl(this._view);
 

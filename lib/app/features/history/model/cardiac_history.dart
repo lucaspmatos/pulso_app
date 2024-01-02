@@ -5,7 +5,7 @@ class CardiacHistory {
   int? systolicPressure;
   int? diastolicPressure;
   double? bodyHeat;
-  DateTime? createdAt;
+  String? createdAt;
 
   CardiacHistory({
     this.id,
@@ -23,19 +23,17 @@ class CardiacHistory {
     bpm = json['bpm'];
     systolicPressure = json['systolic_pressure'];
     diastolicPressure = json['diastolic_pressure'];
-    bodyHeat = json['body_heat'];
+    bodyHeat = double.tryParse(json['body_heat'].toString());
     createdAt = json['created_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
     data['user_id'] = userId;
     data['bpm'] = bpm;
     data['systolic_pressure'] = systolicPressure;
     data['diastolic_pressure'] = diastolicPressure;
     data['body_heat'] = bodyHeat;
-    data['created_at'] = createdAt;
     return data;
   }
 }

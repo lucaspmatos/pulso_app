@@ -1,6 +1,8 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/core/themes/text_theme.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 
 class MeasurementCard extends StatelessWidget {
@@ -11,56 +13,98 @@ class MeasurementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      surfaceTintColor: ColorConstants.white,
       elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+        padding: const EdgeInsets.all(10),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Medição',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+          children: <Widget>[
+            Icon(
+              Icons.favorite_rounded,
+              color: Colors.pinkAccent.shade200,
+              size: 75,
             ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _measurementItem(
-                  Texts.heartbeats,
-                  history.bpm,
-                  'bpm',
-                ),
-                _measurementItem(
-                  Texts.systolicPressure,
-                  history.systolicPressure,
-                  Texts.pressureMeasure,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _measurementItem(
-                  Texts.diastolicPressure,
-                  history.diastolicPressure,
-                  Texts.pressureMeasure,
-                ),
-                _measurementItem(
-                  Texts.bodyHeat,
-                  history.bodyHeat,
-                  Texts.celsius,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              history.createdAt?.toIso8601String() ?? Texts.noData,
-              style: const TextStyle(
-                fontSize: 16,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _getDate(history.createdAt ?? Texts.noData),
+                        style: getTextTheme(context).bodySmall,
+                      ),
+                      Text(
+                        _getHour(history.createdAt ?? Texts.noData),
+                        style: getTextTheme(context).bodySmall,
+                      ),
+                    ],
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      Texts.heartbeats,
+                      style: getTextTheme(context).bodyMedium?.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                    subtitle: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              Texts.heartPressure,
+                              style: getTextTheme(context).bodySmall,
+                            ),
+                            Text(
+                              history.systolicPressure != null
+                                  ? '${history.systolicPressure.toString()} x ${history.diastolicPressure.toString()}'
+                                  : Texts.noData,
+                              style: getTextTheme(context).bodySmall?.copyWith(
+                                color: Colors.pinkAccent.shade400,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              Texts.temperature,
+                              style: getTextTheme(context).bodySmall,
+                            ),
+                            Text(
+                              history.bodyHeat != null
+                                  ? '${history.bodyHeat.toString()} ${Texts.celsius}'
+                                  : Texts.noData,
+                              style: getTextTheme(context).bodySmall?.copyWith(
+                                color: Colors.redAccent.shade200,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    trailing: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.pinkAccent.shade700,
+                      child: Text(
+                        history.bpm.toString(),
+                        style: getTextTheme(context).headlineSmall?.copyWith(
+                          color: ColorConstants.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -69,32 +113,13 @@ class MeasurementCard extends StatelessWidget {
     );
   }
 
-  Widget _measurementItem(String label, dynamic valor, String unidade) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          _getValueText(valor),
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        ),
-        Text(
-          unidade,
-          style: const TextStyle(
-            fontSize: 16,
-          ),
-        ),
-      ],
-    );
+  String _getDate(String givenDateTime) {
+    final DateTime docDateTime = DateTime.parse(givenDateTime);
+    return DateFormat('dd/MM/yy').format(docDateTime);
   }
 
-  String _getValueText(dynamic value) => value ?? Texts.noData;
+  String _getHour(String givenDateTime) {
+    final DateTime docDateTime = DateTime.parse(givenDateTime);
+    return DateFormat('HH:mm').format(docDateTime);
+  }
 }

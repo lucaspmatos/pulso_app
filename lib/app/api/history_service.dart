@@ -5,7 +5,7 @@ import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 
 class HistoryService {
-  static const String apiUrl = '${Texts.baseUrl}/contacts/1';
+  static const String apiUrl = '${Texts.baseUrl}/cardiac_histories/1';
 
   static Future<List<CardiacHistory>> getHistory() async {
     final response = await http.get(Uri.parse(apiUrl));
@@ -20,10 +20,8 @@ class HistoryService {
 
   static Future<void> postHistory(CardiacHistory history) async {
     final response = await http.post(
-      Uri.parse(
-        '${Texts.baseUrl}/cardiac_history/${history.userId}',
-      ),
-      body: history,
+      Uri.parse('${Texts.baseUrl}/cardiac_history'),
+      body: jsonEncode(history.toJson()),
     );
 
     if (response.statusCode == 200) {
