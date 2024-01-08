@@ -8,7 +8,12 @@ class HistoryService {
   static const String apiUrl = '${Texts.baseUrl}/cardiac_histories/1';
 
   static Future<List<CardiacHistory>> getHistory() async {
-    final response = await http.get(Uri.parse(apiUrl));
+    final response = await http.get(
+        Uri.https(
+          Texts.baseUrl,
+          '/cardiac_histories/1',
+        ),
+        headers: Texts.headers);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);

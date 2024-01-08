@@ -3,20 +3,20 @@ import 'dart:io';
 import 'package:heart_bpm/heart_bpm.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:mqtt_client/mqtt_browser_client.dart';
 
 import 'package:pulso_app/app/api/history_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 
 class MonitorControllerImpl implements MonitorController {
   final MonitorView _view;
   MonitorControllerImpl(this._view);
-
-  MqttServerClient client =
-      MqttServerClient.withPort('54.147.89.192', '', 1883);
+  var client = kIsWeb ? MqttBrowserClient('', '') : MqttServerClient('', '');
 
   List<String> topics = [
     Texts.bodyHeatTopic,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:pulso_app/app/router/routes.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
@@ -10,7 +11,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.6,
+      width: MediaQuery.of(context).size.width * (kIsWeb ? 0.2 : 0.6),
       child: Drawer(
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 1,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:heart_bpm/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:heart_bpm/heart_bpm.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
@@ -109,161 +110,166 @@ class _MonitorState extends State<Monitor> implements MonitorView {
       drawer: const AppDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(25),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            isBPMEnabled
-                ? HeartBPMDialog(
-                    context: context,
-                    cameraWidgetWidth: 0,
-                    cameraWidgetHeight: 0,
-                    onRawData: _treatData,
-                    onBPM: _treatBPM,
-                  )
-                : const SizedBox(),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.2,
-              margin: const EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                color: Colors.pinkAccent.shade700,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Align(
-                alignment: Alignment.center,
-                child: ListTile(
-                  title: Text(
-                    Texts.heartbeats,
-                    textAlign: TextAlign.center,
-                    style: getTextTheme(context).displaySmall?.copyWith(
-                          color: ColorConstants.white,
-                        ),
-                  ),
-                  subtitle: Text(
-                    _bpm.toString(),
-                    style: _getTextStyleCard(50),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-            GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15,
-              shrinkWrap: true,
-              childAspectRatio: 1.5,
-              physics: const NeverScrollableScrollPhysics(),
+        child: Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * (kIsWeb ? 0.5 : 1),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                isBPMEnabled
+                    ? HeartBPMDialog(
+                        context: context,
+                        cameraWidgetWidth: 0,
+                        cameraWidgetHeight: 0,
+                        onRawData: _treatData,
+                        onBPM: _treatBPM,
+                      )
+                    : const SizedBox(),
                 Container(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  margin: const EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
-                    color: Colors.pinkAccent.shade400,
+                    color: Colors.pinkAccent.shade700,
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Texts.systolicPressure,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: ListTile(
+                      title: Text(
+                        Texts.heartbeats,
                         textAlign: TextAlign.center,
-                        style: getTextTheme(context).bodySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
+                        style: getTextTheme(context).displaySmall?.copyWith(
                               color: ColorConstants.white,
                             ),
                       ),
-                      Text(
-                        _systolic,
-                        style: _getTextStyleCard(40),
+                      subtitle: Text(
+                        _bpm.toString(),
+                        style: _getTextStyleCard(50),
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        Texts.pressureMeasure,
-                        style: getTextTheme(context).bodySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: ColorConstants.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
+                GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  shrinkWrap: true,
+                  childAspectRatio: 1.5,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.pinkAccent.shade400,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            Texts.systolicPressure,
+                            textAlign: TextAlign.center,
+                            style: getTextTheme(context).bodySmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorConstants.white,
+                                ),
+                          ),
+                          Text(
+                            _systolic,
+                            style: _getTextStyleCard(40),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            Texts.pressureMeasure,
+                            style: getTextTheme(context).bodySmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorConstants.white,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.pinkAccent.shade200,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            Texts.diastolicPressure,
+                            textAlign: TextAlign.center,
+                            style: getTextTheme(context).bodySmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorConstants.white,
+                                ),
+                          ),
+                          Text(
+                            _diastolic,
+                            style: _getTextStyleCard(40),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            Texts.pressureMeasure,
+                            style: getTextTheme(context).bodySmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorConstants.white,
+                                ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
                 Container(
+                  margin: const EdgeInsets.only(top: 15),
                   decoration: BoxDecoration(
-                    color: Colors.pinkAccent.shade200,
-                    borderRadius: BorderRadius.circular(25),
+                    color: Colors.redAccent.shade200,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        Texts.diastolicPressure,
-                        textAlign: TextAlign.center,
-                        style: getTextTheme(context).bodySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: ColorConstants.white,
-                            ),
-                      ),
-                      Text(
-                        _diastolic,
-                        style: _getTextStyleCard(40),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        Texts.pressureMeasure,
-                        style: getTextTheme(context).bodySmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: ColorConstants.white,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                  alignment: Alignment.center,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    title: Text(
+                      Texts.bodyHeat,
+                      style: getTextTheme(context).bodySmall?.copyWith(
+                            color: ColorConstants.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    trailing: Text(
+                      "$_bodyHeat${Texts.celsius}",
+                      style: getTextTheme(context).displayLarge?.copyWith(
+                            color: ColorConstants.white,
+                            fontWeight: FontWeight.w100,
+                            fontSize: 25,
+                          ),
+                    ),
+                  ),
+                ),
+
+                // isBPMEnabled && bpmValues.isNotEmpty
+                //     ? Container(
+                //         decoration: BoxDecoration(border: Border.all()),
+                //         constraints: const BoxConstraints.expand(height: 180),
+                //         child: BPMChart(bpmValues),
+                //       )
+                //     : const SizedBox(),
+                Center(
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.favorite_rounded),
+                    label: Text(
+                      isBPMEnabled ? Texts.stopMeasurement : Texts.measureBPM,
+                    ),
+                    onPressed: _toggleBPM,
                   ),
                 ),
               ],
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 15),
-              decoration: BoxDecoration(
-                color: Colors.redAccent.shade200,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              alignment: Alignment.center,
-              child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                title: Text(
-                  Texts.bodyHeat,
-                  style: getTextTheme(context).bodySmall?.copyWith(
-                        color: ColorConstants.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                trailing: Text(
-                  "$_bodyHeat${Texts.celsius}",
-                  style: getTextTheme(context).displayLarge?.copyWith(
-                        color: ColorConstants.white,
-                        fontWeight: FontWeight.w100,
-                        fontSize: 25,
-                      ),
-                ),
-              ),
-            ),
-
-            // isBPMEnabled && bpmValues.isNotEmpty
-            //     ? Container(
-            //         decoration: BoxDecoration(border: Border.all()),
-            //         constraints: const BoxConstraints.expand(height: 180),
-            //         child: BPMChart(bpmValues),
-            //       )
-            //     : const SizedBox(),
-            Center(
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.favorite_rounded),
-                label: Text(
-                  isBPMEnabled ? Texts.stopMeasurement : Texts.measureBPM,
-                ),
-                onPressed: _toggleBPM,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
