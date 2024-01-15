@@ -17,7 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () => Routes.monitorRoute(context));
+    Timer(
+      const Duration(seconds: Numbers.three),
+      () => Routes.monitorRoute(context),
+    );
   }
 
   @override
@@ -30,26 +33,25 @@ class _SplashScreenState extends State<SplashScreen> {
             Icon(
               Icons.favorite_rounded,
               color: Colors.deepPurple.shade400,
-              size: 90,
+              size: Numbers.heartbeatIconSize,
             ),
             Text(
               Texts.appTitle,
               style: getTextTheme(context).displayLarge?.copyWith(
-                fontFamily: GoogleFonts.lato().fontFamily,
-                color: Colors.deepPurple.shade400,
-              ),
+                    fontFamily: GoogleFonts.lato().fontFamily,
+                    color: Colors.deepPurple.shade400,
+                  ),
             ),
             Text(
               Texts.slogan,
               style: getTextTheme(context).bodyLarge?.copyWith(
-                height: 2,
-              ),
+                    height: Numbers.two,
+                  ),
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: Numbers.hundred),
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.deepPurple.shade400
-              ),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(Colors.deepPurple.shade400),
             ),
           ],
         ),

@@ -11,18 +11,18 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * (kIsWeb ? 0.2 : 0.6),
+      width: MediaQuery.of(context).size.width *
+          (kIsWeb ? Numbers.drawerWebWidth : Numbers.drawerAppWidth),
       child: Drawer(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 1,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: <Widget>[
-              const DrawerHeader(child:
-                SizedBox(
-                  width: double.infinity,
-                  height: double.infinity,
-                )
-              ),
+              const DrawerHeader(
+                  child: SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+              )),
               DrawerItem(
                 icon: Icons.monitor_heart,
                 text: Texts.monitor,

@@ -29,7 +29,7 @@ class DrawerItem extends StatelessWidget {
             color: iconColor ?? ColorConstants.strongGrey,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: Numbers.defaultLeftPadding,
             child: Text(
               text,
               style: getTextTheme(context)

@@ -1,4 +1,3 @@
-import 'package:heart_bpm/heart_bpm.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 
 abstract class MonitorView {
@@ -9,7 +8,7 @@ abstract class MonitorView {
 }
 
 abstract class MonitorController {
+  void stopMeasurement();
   void subscribeTopics();
-  void calcBPM(List<SensorValue> bpmList);
-  void stopMeasurement(CardiacHistory history);
+  void calcHistory(List<CardiacHistory> history);
 }

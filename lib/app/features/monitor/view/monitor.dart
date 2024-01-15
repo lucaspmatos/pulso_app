@@ -23,6 +23,7 @@ class Monitor extends StatefulWidget {
 class _MonitorState extends State<Monitor> implements MonitorView {
   List<SensorValue> data = [];
   List<SensorValue> bpmValues = [];
+  List<CardiacHistory> history = <CardiacHistory>[];
 
   bool isBPMEnabled = false;
   late MonitorController _controller;
@@ -36,13 +37,18 @@ class _MonitorState extends State<Monitor> implements MonitorView {
     _controller = MonitorControllerImpl(this);
   }
 
-  void _toggleBPM() {
+  @override
+  void setButtonValue() {
     setState(() => isBPMEnabled ? isBPMEnabled = false : isBPMEnabled = true);
 
-    if (isBPMEnabled) _controller.subscribeTopics();
+    if (isBPMEnabled) {
+      _controller.subscribeTopics();
+      Future.delayed(const Duration(seconds: Numbers.measurementDuration))
+          .whenComplete(() => _controller.stopMeasurement());
+    }
 
     if (!isBPMEnabled && bpmValues.isNotEmpty) {
-      _controller.calcBPM(bpmValues);
+      _controller.calcHistory(history);
     }
   }
 
@@ -64,23 +70,17 @@ class _MonitorState extends State<Monitor> implements MonitorView {
           time: DateTime.now(),
         ),
       );
-    });
-
-    Timer(const Duration(seconds: 15), () {
-      _controller.stopMeasurement(
+      history.add(
         CardiacHistory(
           userId: 1,
           bpm: _bpm,
           systolicPressure: int.tryParse(_systolic),
           diastolicPressure: int.tryParse(_diastolic),
           bodyHeat: double.tryParse(_bodyHeat),
-        )
+        ),
       );
     });
   }
-
-  @override
-  void setButtonValue() => setState(() => isBPMEnabled = false);
 
   @override
   setBodyHeat(String value) => setState(() => _bodyHeat = value);
@@ -91,13 +91,12 @@ class _MonitorState extends State<Monitor> implements MonitorView {
   @override
   setSystolicPressure(String value) => setState(() => _systolic = value);
 
-  TextStyle? _getTextStyleCard(double? fontSize) {
-    return getTextTheme(context).displayLarge?.copyWith(
-          color: ColorConstants.white,
-          fontWeight: FontWeight.w100,
-          fontSize: fontSize,
-        );
-  }
+  TextStyle? _getTextStyleCard(double? fontSize) =>
+      getTextTheme(context).displayLarge?.copyWith(
+            color: ColorConstants.white,
+            fontWeight: FontWeight.w100,
+            fontSize: fontSize,
+          );
 
   @override
   Widget build(BuildContext context) {
@@ -109,29 +108,31 @@ class _MonitorState extends State<Monitor> implements MonitorView {
       ),
       drawer: const AppDrawer(),
       body: Padding(
-        padding: const EdgeInsets.all(25),
+        padding: Numbers.monitorDefaultMargin,
         child: Center(
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * (kIsWeb ? 0.5 : 1),
+            width: MediaQuery.of(context).size.width *
+                (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 isBPMEnabled
                     ? HeartBPMDialog(
                         context: context,
-                        cameraWidgetWidth: 0,
-                        cameraWidgetHeight: 0,
+                        cameraWidgetWidth: Numbers.zero,
+                        cameraWidgetHeight: Numbers.zero,
                         onRawData: _treatData,
                         onBPM: _treatBPM,
                       )
                     : const SizedBox(),
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  margin: const EdgeInsets.only(bottom: 15),
+                  height: MediaQuery.of(context).size.height *
+                      Numbers.heartbeatsContainerHeight,
+                  margin: Numbers.heartbeatsContainerBottomMargin,
                   decoration: BoxDecoration(
                     color: Colors.pinkAccent.shade700,
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(Numbers.twentyFive),
                   ),
                   child: Align(
                     alignment: Alignment.center,
@@ -145,23 +146,23 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                       ),
                       subtitle: Text(
                         _bpm.toString(),
-                        style: _getTextStyleCard(50),
+                        style: _getTextStyleCard(Numbers.fifty),
                         textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
                 GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
+                  crossAxisCount: Numbers.two.toInt(),
+                  crossAxisSpacing: Numbers.fifteen,
                   shrinkWrap: true,
-                  childAspectRatio: 1.5,
+                  childAspectRatio: Numbers.gridViewAspectRatio,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.pinkAccent.shade400,
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(Numbers.twentyFive),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +177,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                           ),
                           Text(
                             _systolic,
-                            style: _getTextStyleCard(40),
+                            style: _getTextStyleCard(Numbers.fourty),
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -193,7 +194,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.pinkAccent.shade200,
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(Numbers.twentyFive),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -208,7 +209,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                           ),
                           Text(
                             _diastolic,
-                            style: _getTextStyleCard(40),
+                            style: _getTextStyleCard(Numbers.fourty),
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -225,14 +226,15 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                   ],
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 15),
+                  margin: const EdgeInsets.only(top: Numbers.fifteen),
                   decoration: BoxDecoration(
                     color: Colors.redAccent.shade200,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(Numbers.fifteen),
                   ),
                   alignment: Alignment.center,
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: Numbers.fifteen),
                     title: Text(
                       Texts.bodyHeat,
                       style: getTextTheme(context).bodySmall?.copyWith(
@@ -264,7 +266,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                     label: Text(
                       isBPMEnabled ? Texts.stopMeasurement : Texts.measureBPM,
                     ),
-                    onPressed: _toggleBPM,
+                    onPressed: setButtonValue,
                   ),
                 ),
               ],

@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
+import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 
 class MeasurementCard extends StatelessWidget {
@@ -13,24 +13,24 @@ class MeasurementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      margin: Numbers.measurementCardMargin,
       surfaceTintColor: ColorConstants.white,
-      elevation: 2,
+      elevation: Numbers.two,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(Numbers.four),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: Numbers.measurementCardPadding,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Icon(
               Icons.favorite_rounded,
               color: Colors.pinkAccent.shade200,
-              size: 75,
+              size: Numbers.heartbeatIconSize,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: Numbers.ten),
             Expanded(
               child: Column(
                 children: [
@@ -94,7 +94,7 @@ class MeasurementCard extends StatelessWidget {
                       ],
                     ),
                     trailing: CircleAvatar(
-                      radius: 30,
+                      radius: Numbers.heartbeatRadius,
                       backgroundColor: Colors.pinkAccent.shade700,
                       child: Text(
                         history.bpm.toString(),
@@ -115,11 +115,11 @@ class MeasurementCard extends StatelessWidget {
 
   String _getDate(String givenDateTime) {
     final DateTime docDateTime = DateTime.parse(givenDateTime);
-    return DateFormat('dd/MM/yy').format(docDateTime);
+    return DateFormat(Texts.historyDateFormat).format(docDateTime);
   }
 
   String _getHour(String givenDateTime) {
     final DateTime docDateTime = DateTime.parse(givenDateTime);
-    return DateFormat('HH:mm').format(docDateTime);
+    return DateFormat(Texts.historyTimeFormat).format(docDateTime);
   }
 }

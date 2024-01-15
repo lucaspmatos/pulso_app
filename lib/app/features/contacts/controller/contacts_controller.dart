@@ -1,7 +1,7 @@
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:pulso_app/app/api/contacts_service.dart';
-
+import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/contacts/model/contact.dart';
 import 'package:pulso_app/app/features/contacts/contract/contacts_contract.dart';
 
@@ -15,7 +15,7 @@ class ContactsControllerImpl implements ContactsController {
       List<Contact> fetchedContacts = await ContactService.getContacts();
       _view.loadContacts(fetchedContacts);
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Erro ao carregar contatos!');
+      Fluttertoast.showToast(msg: Texts.loadContactsErrorMsg);
     }
   }
 
@@ -25,7 +25,7 @@ class ContactsControllerImpl implements ContactsController {
       await ContactService.deleteContact(id);
       _loadContacts();
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Erro ao deletar contato!');
+      Fluttertoast.showToast(msg: Texts.deleteContactErrorMsg);
     }
   }
 

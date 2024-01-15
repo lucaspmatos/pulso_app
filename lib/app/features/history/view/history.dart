@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:pulso_app/app/components/components.dart';
@@ -60,7 +59,7 @@ class _HistoryState extends State<History> implements HistoryView {
           CircularProgressIndicator(),
           Text(
             Texts.loadingHistory,
-            style: TextStyle(height: 4),
+            style: TextStyle(height: Numbers.four),
           ),
         ],
       ),

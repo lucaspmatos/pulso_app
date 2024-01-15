@@ -42,7 +42,7 @@ class _ContactsState extends State<Contacts> implements ContactsView {
           final contact = contacts[index];
           if (contacts.isNotEmpty) {
             return Container(
-              margin: const EdgeInsets.all(12.0),
+              margin: Numbers.contactsMargin,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -62,11 +62,11 @@ class _ContactsState extends State<Contacts> implements ContactsView {
                         },
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(1.0),
+                          padding: Numbers.deleteContactButtonPadding,
                         ),
                         child: const Icon(
                           Icons.delete_forever_outlined,
-                          size: 25,
+                          size: Numbers.deleteContactIconSize,
                         ),
                       ),
                     ],
@@ -91,7 +91,9 @@ class _ContactsState extends State<Contacts> implements ContactsView {
           CircularProgressIndicator(),
           Text(
             Texts.loadingContacts,
-            style: TextStyle(height: 4),
+            style: TextStyle(
+              height: Numbers.four,
+            ),
           ),
         ],
       ),

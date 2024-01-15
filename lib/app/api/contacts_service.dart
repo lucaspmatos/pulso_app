@@ -14,7 +14,7 @@ class ContactService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => Contact.fromJson(json)).toList();
     } else {
-      throw Exception('Falha ao carregar os contatos');
+      throw Exception(Texts.contactsListException);
     }
   }
 
@@ -24,7 +24,7 @@ class ContactService {
     if (response.statusCode == 200) {
       return;
     } else {
-      throw Exception('Erro ao excluir o contato');
+      throw Exception(Texts.deleteContactException);
     }
   }
 }

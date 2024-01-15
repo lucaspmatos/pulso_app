@@ -4,7 +4,8 @@ import 'package:pulso_app/app/core/themes/themes.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
 
 class DrawerAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const DrawerAppBar({Key? key,
+  const DrawerAppBar({
+    Key? key,
     this.context,
     required this.title,
     this.bottom,
@@ -27,9 +28,11 @@ class DrawerAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: getTextTheme(context).displaySmall?.copyWith(fontSize: 22),
+        style: getTextTheme(context).displaySmall?.copyWith(
+              fontSize: Numbers.drawerAppBarFontSize,
+            ),
       ),
-      titleSpacing: 0,
+      titleSpacing: Numbers.zero,
       iconTheme: IconThemeData(color: iconColor),
       actions: actions,
       bottom: bottom,

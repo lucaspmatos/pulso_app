@@ -14,7 +14,7 @@ class HistoryService {
       final List<dynamic> data = json.decode(response.body);
       return data.map((json) => CardiacHistory.fromJson(json)).toList();
     } else {
-      throw Exception('Falha ao carregar o histórico');
+      throw Exception(Texts.historyListException);
     }
   }
 
@@ -27,7 +27,7 @@ class HistoryService {
     if (response.statusCode == 200) {
       return;
     } else {
-      throw Exception('Erro ao incluir histórico');
+      throw Exception(Texts.postHistoryException);
     }
   }
 }

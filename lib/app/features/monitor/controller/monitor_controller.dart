@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:mqtt_client/mqtt_browser_client.dart';
 
 import 'package:pulso_app/app/api/history_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
@@ -16,7 +15,7 @@ import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 class MonitorControllerImpl implements MonitorController {
   final MonitorView _view;
   MonitorControllerImpl(this._view);
-  var client = kIsWeb ? MqttBrowserClient('', '') : MqttServerClient('', '');
+  var client = MqttServerClient(Texts.server, Texts.clientIdentifier);
 
   List<String> topics = [
     Texts.bodyHeatTopic,
@@ -26,17 +25,39 @@ class MonitorControllerImpl implements MonitorController {
 
   int bpmAvg = 0;
 
-  String _setWhatsAppUrl(String text) {
-    return "https://api.callmebot.com/whatsapp.php?phone=[]&text=$text&apikey=[]";
-  }
+  String _setWhatsAppUrl(String phone, String text, String apiKey) =>
+      Texts.whatsAppUrl(phone, text, apiKey);
 
-  _sendWhatsApp(int avg) async {
-    if (avg > 140) {
-      var url = _setWhatsAppUrl("");
-      await canLaunchUrl(Uri.parse(url))
-          ? await launchUrl(Uri.parse(url))
-          : throw 'Could not launch $url';
+  _sendWhatsApp(CardiacHistory report) async {
+    String msg = "*RELATÓRIO CARDÍACO*";
+
+    if (report.bpm! < 50) {
+      msg += "\n*BPM*: ${report.bpm} (BRADICARDIA)\n";
+    } else if (report.bpm! > 100) {
+      msg += "\n*BPM*: ${report.bpm} (TAQUICARDIA)\n";
     }
+
+    if (report.systolicPressure! >= 140 && report.diastolicPressure! >= 90) {
+      msg +=
+          "\n*Pressão arterial*: ${report.systolicPressure} x ${report.diastolicPressure} (PRESSÃO ALTA)\n";
+    } else if (report.systolicPressure! <= 90 &&
+        report.diastolicPressure! <= 60) {
+      msg +=
+          "\n*Pressão arterial*: ${report.systolicPressure} x ${report.diastolicPressure} (PRESSÃO BAIXA)\n";
+    }
+
+    if (report.bodyHeat! >= 39.5) {
+      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (FEBRE ALTA)\n";
+    } else if (report.bodyHeat! >= 37.6) {
+      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (FEBRE)\n";
+    } else if (report.bodyHeat! <= 35) {
+      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (HIPOTERMIA)\n";
+    }
+
+    var url = _setWhatsAppUrl(Texts.phone, msg, Texts.apiKey);
+    await canLaunchUrl(Uri.parse(url))
+        ? await launchUrl(Uri.parse(url))
+        : throw Texts.urlError(url);
   }
 
   _changeSensorValues(String topic, String payload) {
@@ -52,11 +73,12 @@ class MonitorControllerImpl implements MonitorController {
     }
   }
 
-  _saveHistory(CardiacHistory newHistory) async {
+  void _saveHistory(CardiacHistory newHistory) async {
     try {
       await HistoryService.postHistory(newHistory);
+      Fluttertoast.showToast(msg: Texts.saveHistorySuccessMsg);
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Erro ao salvar histórico!');
+      Fluttertoast.showToast(msg: Texts.saveHistoryErrorMsg);
     }
   }
 
@@ -68,11 +90,11 @@ class MonitorControllerImpl implements MonitorController {
       await client.connect();
     } on NoConnectionException catch (e) {
       // Raised by the client when connection fails.
-      print('EXAMPLE::client exception - $e');
+      print(Texts.clientException(e.toString()));
       client.disconnect();
     } on SocketException catch (e) {
       // Raised by the socket layer
-      print('EXAMPLE::socket exception - $e');
+      print(Texts.socketException(e.toString()));
       client.disconnect();
     }
 
@@ -86,25 +108,35 @@ class MonitorControllerImpl implements MonitorController {
         final pt =
             MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
         _changeSensorValues(c[0].topic, pt);
-
-        print('EXAMPLE:: topic is <${c[0].topic}>, payload is <-- $pt -->');
-        print('');
+        print(Texts.topicLog(c[0].topic, pt));
       });
     }
   }
 
   @override
-  stopMeasurement(CardiacHistory history) {
+  void stopMeasurement() {
     client.disconnect();
-    _saveHistory(history);
     _view.setButtonValue();
   }
 
   @override
-  void calcBPM(List<SensorValue> bpmList) {
-    int sum = 0;
-    if (bpmList.isNotEmpty) bpmList.forEach((e) => sum += e.value.toInt());
-    bpmAvg = sum ~/ bpmList.length;
-    _sendWhatsApp(bpmAvg);
+  void calcHistory(List<CardiacHistory> history) {
+    if (history.isNotEmpty) {
+      int sum = 0;
+      for (var e in history) {
+        sum += e.bpm!.toInt();
+      }
+      bpmAvg = sum ~/ history.length;
+
+      CardiacHistory report = CardiacHistory(
+        userId: 1,
+        bpm: bpmAvg,
+        systolicPressure: history.last.systolicPressure,
+        diastolicPressure: history.last.diastolicPressure,
+        bodyHeat: history.last.bodyHeat,
+      );
+      _saveHistory(report);
+      _sendWhatsApp(report);
+    }
   }
 }
