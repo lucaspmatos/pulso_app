@@ -114,12 +114,12 @@ class MeasurementCard extends StatelessWidget {
   }
 
   String _getDate(String givenDateTime) {
-    final DateTime docDateTime = DateTime.parse(givenDateTime);
-    return DateFormat(Texts.historyDateFormat).format(docDateTime);
+    final DateTime docDateTime = DateTime.parse(givenDateTime).toLocal();
+    return DateFormat(Texts.historyDateFormat, 'pt-BR').format(docDateTime);
   }
 
   String _getHour(String givenDateTime) {
-    final DateTime docDateTime = DateTime.parse(givenDateTime);
-    return DateFormat(Texts.historyTimeFormat).format(docDateTime);
+    final DateTime docDateTime = DateTime.parse(givenDateTime).toLocal();
+    return DateFormat(Texts.historyTimeFormat, 'pt-BR').format(docDateTime);
   }
 }

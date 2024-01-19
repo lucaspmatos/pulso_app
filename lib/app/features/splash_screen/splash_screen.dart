@@ -32,14 +32,14 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Icon(
               Icons.favorite_rounded,
-              color: Colors.deepPurple.shade400,
+              color: Colors.pinkAccent.shade400,
               size: Numbers.heartbeatIconSize,
             ),
             Text(
               Texts.appTitle,
               style: getTextTheme(context).displayLarge?.copyWith(
                     fontFamily: GoogleFonts.lato().fontFamily,
-                    color: Colors.deepPurple.shade400,
+                    color: Colors.pinkAccent.shade200,
                   ),
             ),
             Text(
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: Numbers.hundred),
             CircularProgressIndicator(
               valueColor:
-                  AlwaysStoppedAnimation<Color>(Colors.deepPurple.shade400),
+                  AlwaysStoppedAnimation<Color>(Colors.pinkAccent.shade100),
             ),
           ],
         ),

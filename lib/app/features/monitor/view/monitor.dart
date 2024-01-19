@@ -47,9 +47,21 @@ class _MonitorState extends State<Monitor> implements MonitorView {
           .whenComplete(() => _controller.stopMeasurement());
     }
 
-    if (!isBPMEnabled && bpmValues.isNotEmpty) {
+    if (!isBPMEnabled) {
       _controller.calcHistory(history);
     }
+  }
+
+  void _addHistory() {
+    history.add(
+      CardiacHistory(
+        userId: 1,
+        bpm: _bpm,
+        systolicPressure: int.tryParse(_systolic),
+        diastolicPressure: int.tryParse(_diastolic),
+        bodyHeat: double.tryParse(_bodyHeat),
+      ),
+    );
   }
 
   void _treatData(SensorValue value) {
@@ -62,34 +74,33 @@ class _MonitorState extends State<Monitor> implements MonitorView {
   void _treatBPM(int value) {
     setState(() {
       _bpm = value;
-
       if (bpmValues.length >= 100) bpmValues.removeAt(0);
-      bpmValues.add(
-        SensorValue(
-          value: value.toDouble(),
-          time: DateTime.now(),
-        ),
-      );
-      history.add(
-        CardiacHistory(
-          userId: 1,
-          bpm: _bpm,
-          systolicPressure: int.tryParse(_systolic),
-          diastolicPressure: int.tryParse(_diastolic),
-          bodyHeat: double.tryParse(_bodyHeat),
-        ),
-      );
+      _addHistory();
     });
   }
 
   @override
-  setBodyHeat(String value) => setState(() => _bodyHeat = value);
+  void setBpm(String value) {
+    setState(() {
+      _bpm = int.parse(value);
+      bpmValues.add(
+        SensorValue(
+          time: DateTime.now(),
+          value: _bpm.toDouble(),
+        ),
+      );
+      _addHistory();
+    });
+  }
 
   @override
-  setDiastolicPressure(String value) => setState(() => _diastolic = value);
+  void setDiastolicPressure(String value) => setState(() => _diastolic = value);
 
   @override
-  setSystolicPressure(String value) => setState(() => _systolic = value);
+  void setSystolicPressure(String value) => setState(() => _systolic = value);
+
+  @override
+  void setBodyHeat(String value) => setState(() => _bodyHeat = value);
 
   TextStyle? _getTextStyleCard(double? fontSize) =>
       getTextTheme(context).displayLarge?.copyWith(
@@ -116,7 +127,7 @@ class _MonitorState extends State<Monitor> implements MonitorView {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                isBPMEnabled
+                isBPMEnabled && !kIsWeb
                     ? HeartBPMDialog(
                         context: context,
                         cameraWidgetWidth: Numbers.zero,
@@ -252,14 +263,19 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                     ),
                   ),
                 ),
-
-                // isBPMEnabled && bpmValues.isNotEmpty
-                //     ? Container(
-                //         decoration: BoxDecoration(border: Border.all()),
-                //         constraints: const BoxConstraints.expand(height: 180),
-                //         child: BPMChart(bpmValues),
-                //       )
-                //     : const SizedBox(),
+                kIsWeb && bpmValues.isNotEmpty
+                    ? Container(
+                        margin: Numbers.chartDefaultMargin,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(
+                            Numbers.twentyFive,
+                          ),
+                        ),
+                        constraints: const BoxConstraints.expand(height: 180),
+                        child: BPMChart(bpmValues),
+                      )
+                    : const SizedBox(),
                 Center(
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.favorite_rounded),

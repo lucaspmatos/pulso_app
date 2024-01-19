@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:heart_bpm/heart_bpm.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:pulso_app/app/broker/server.dart'
+    if (dart.library.html) 'package:pulso_app/app/broker/browser.dart' as mqtt;
 
 import 'package:pulso_app/app/api/history_service.dart';
+import 'package:pulso_app/app/api/monitor_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
@@ -15,9 +15,10 @@ import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 class MonitorControllerImpl implements MonitorController {
   final MonitorView _view;
   MonitorControllerImpl(this._view);
-  var client = MqttServerClient(Texts.server, Texts.clientIdentifier);
+  var client = mqtt.setup();
 
   List<String> topics = [
+    Texts.bpmTopic,
     Texts.bodyHeatTopic,
     Texts.systolicTopic,
     Texts.diastolicTopic
@@ -25,43 +26,43 @@ class MonitorControllerImpl implements MonitorController {
 
   int bpmAvg = 0;
 
-  String _setWhatsAppUrl(String phone, String text, String apiKey) =>
-      Texts.whatsAppUrl(phone, text, apiKey);
-
   _sendWhatsApp(CardiacHistory report) async {
-    String msg = "*RELATÓRIO CARDÍACO*";
+    String msg = Texts.cardiacReport;
 
     if (report.bpm! < 50) {
-      msg += "\n*BPM*: ${report.bpm} (BRADICARDIA)\n";
+      msg += "\n${Texts.bpmTitle} ${report.bpm} (BRADICARDIA)\n";
     } else if (report.bpm! > 100) {
-      msg += "\n*BPM*: ${report.bpm} (TAQUICARDIA)\n";
+      msg += "\n${Texts.bpmTitle} ${report.bpm} (TAQUICARDIA)\n";
     }
 
     if (report.systolicPressure! >= 140 && report.diastolicPressure! >= 90) {
       msg +=
-          "\n*Pressão arterial*: ${report.systolicPressure} x ${report.diastolicPressure} (PRESSÃO ALTA)\n";
+          "\n${Texts.pressureTitle} ${report.systolicPressure} x ${report.diastolicPressure} ${Texts.pressureMeasure} (PRESSÃO ALTA)\n";
     } else if (report.systolicPressure! <= 90 &&
         report.diastolicPressure! <= 60) {
       msg +=
-          "\n*Pressão arterial*: ${report.systolicPressure} x ${report.diastolicPressure} (PRESSÃO BAIXA)\n";
+          "\n${Texts.pressureTitle}  ${report.systolicPressure} x ${report.diastolicPressure} ${Texts.pressureMeasure}  (PRESSÃO BAIXA)\n";
     }
 
     if (report.bodyHeat! >= 39.5) {
-      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (FEBRE ALTA)\n";
+      msg +=
+          "\n${Texts.tempTitle} ${report.bodyHeat} ${Texts.celsius} (FEBRE ALTA)\n";
     } else if (report.bodyHeat! >= 37.6) {
-      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (FEBRE)\n";
+      msg +=
+          "\n${Texts.tempTitle}  ${report.bodyHeat} ${Texts.celsius} (FEBRE)\n";
     } else if (report.bodyHeat! <= 35) {
-      msg += "\n*Temperatura corporal*: ${report.bodyHeat} (HIPOTERMIA)\n";
+      msg +=
+          "\n${Texts.tempTitle}  ${report.bodyHeat} ${Texts.celsius} (HIPOTERMIA)\n";
     }
 
-    var url = _setWhatsAppUrl(Texts.phone, msg, Texts.apiKey);
-    await canLaunchUrl(Uri.parse(url))
-        ? await launchUrl(Uri.parse(url))
-        : throw Texts.urlError(url);
+    await MonitorService.sendMessage(msg);
+    Fluttertoast.showToast(msg: Texts.whatsAppMsgSuccess);
   }
 
   _changeSensorValues(String topic, String payload) {
     switch (topic) {
+      case Texts.bpmTopic:
+        if (kIsWeb) return _view.setBpm(payload);
       case Texts.bodyHeatTopic:
         return _view.setBodyHeat(payload);
       case Texts.systolicTopic:
@@ -85,6 +86,7 @@ class MonitorControllerImpl implements MonitorController {
   @override
   void subscribeTopics() async {
     client.setProtocolV311();
+    client.websocketProtocols = MqttClientConstants.protocolsSingleDefault;
 
     try {
       await client.connect();

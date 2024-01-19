@@ -7,6 +7,7 @@ class Numbers {
   static const double four = 4;
   static const double ten = 10;
   static const double fifteen = 15;
+  static const double twenty = 20;
   static const double twentyFive = 25;
   static const double fourty = 40;
   static const double fifty = 50;
@@ -35,12 +36,15 @@ class Numbers {
       EdgeInsets.fromLTRB(20, 20, 20, 0);
 
   // Monitor
+  static const int serverPort = 1883;
+  static const int browserPort = 8080;
   static const double monitorWebWidth = 0.5;
   static const double monitorAppWidth = 1.0;
-  static const int measurementDuration = 15;
+  static const int measurementDuration = 30;
   static const double gridViewAspectRatio = 1.5;
   static const double heartbeatsContainerHeight = 0.2;
   static const EdgeInsets monitorDefaultMargin = EdgeInsets.all(25);
+  static const EdgeInsets chartDefaultMargin = EdgeInsets.symmetric(vertical: 25);
   static const EdgeInsets heartbeatsContainerBottomMargin = EdgeInsets.only(bottom: 15);
 
   // Splash Screen

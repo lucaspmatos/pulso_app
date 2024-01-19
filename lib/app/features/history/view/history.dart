@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
@@ -41,6 +42,12 @@ class _HistoryState extends State<History> implements HistoryView {
         itemBuilder: (context, index) {
           final historyItem = history[index];
           if (history.isNotEmpty) {
+            if (index == history.length - 1) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: Numbers.twenty),
+                child: MeasurementCard(historyItem),
+              );
+            }
             return MeasurementCard(historyItem);
           }
           return const Center(
@@ -75,7 +82,13 @@ class _HistoryState extends State<History> implements HistoryView {
         context: context,
       ),
       drawer: const AppDrawer(),
-      body: _loadPage(history),
+      body: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width *
+              (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
+          child: _loadPage(history),
+        ),
+      ),
     );
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:pulso_app/app/components/components.dart';
-import 'package:pulso_app/app/core/constants/constants.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
+import 'package:pulso_app/app/core/constants/constants.dart';
 
 import 'package:pulso_app/app/features/contacts/model/contact.dart';
 import 'package:pulso_app/app/features/contacts/contract/contacts_contract.dart';
@@ -109,7 +110,13 @@ class _ContactsState extends State<Contacts> implements ContactsView {
         context: context,
       ),
       drawer: const AppDrawer(),
-      body: _loadPage(contacts),
+      body: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width *
+              (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
+          child: _loadPage(contacts),
+        ),
+      ),
     );
   }
 }

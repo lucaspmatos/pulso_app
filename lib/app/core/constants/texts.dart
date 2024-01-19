@@ -30,14 +30,22 @@ class Texts {
   static const String diastolicPressure = "Pressão diastólica";
   static const String bodyHeat = "TEMPERATURA CORPORAL";
   static const String pressureMeasure = "mmHg";
-  static const String bodyHeatTopic = "temp";
-  static const String systolicTopic = "systolic";
-  static const String diastolicTopic = "diastolic";
+  static const String bpmTopic = "bpm_pulso_app";
+  static const String bodyHeatTopic = "temp_pulso_app";
+  static const String systolicTopic = "systolic_pulso_app";
+  static const String diastolicTopic = "diastolic_pulso_app";
   static const String celsius = "ºC";
-  static const String server = "";
+  static const String server = "test.mosquitto.org";
+  static const String browserServer = "ws://test.mosquitto.org";
   static const String clientIdentifier = "";
-  static const String phone = "+5562981211293";
+  static const String phone = "556281211293";
   static const String apiKey = "7075847";
+  static const String cardiacReport = "*RELATÓRIO CARDÍACO*\n";
+  static const String bpmTitle = "*BPM* (batimentos por minuto):";
+  static const String pressureTitle = "*Pressão arterial*:";
+  static const String tempTitle = "*Temperatura corporal*:";
+  static const String whatsAppMsgSuccess = "Relatório enviado com sucesso!";
+  static const String whatsAppMsgException = "Nâo foi possível enviar o relatório!";
 
   static String whatsAppUrl(String phone, String text, String apiKey) =>
       "https://api.callmebot.com/whatsapp.php?phone=$phone&text=$text&apikey=$apiKey";
@@ -48,7 +56,6 @@ class Texts {
   static String socketException(String e) => "EXAMPLE::socket exception - $e";
 
   // History
-  static const String bpm = "bpm";
   static const String noData = "--";
   static const String heartPressure = "Pressão arterial";
   static const String temperature = "Temperatura";
