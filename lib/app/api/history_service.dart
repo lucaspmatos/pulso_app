@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/login/model/user.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 
 class HistoryService {
-  static const String apiUrl = '${Texts.baseUrl}/cardiac_histories/1';
-
   static Future<List<CardiacHistory>> getHistory() async {
+    final user = UserSession.instance.user;
+    String apiUrl = '${Texts.baseUrl}/cardiac_histories/${user?.id}';
+
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {

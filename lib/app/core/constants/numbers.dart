@@ -16,6 +16,8 @@ class Numbers {
   // Drawer
   static const double drawerWebWidth = 0.2;
   static const double drawerAppWidth = 0.6;
+  static const double drawerWebHeight = 0.1;
+  static const double drawerAppHeight = 0.4;
 
   // Drawer App Bar
   static const double drawerAppBarFontSize = 22;

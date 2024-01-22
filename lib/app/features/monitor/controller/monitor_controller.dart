@@ -9,6 +9,7 @@ import 'package:pulso_app/app/broker/server.dart'
 import 'package:pulso_app/app/api/history_service.dart';
 import 'package:pulso_app/app/api/monitor_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/login/model/user.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/monitor/contract/monitor_contract.dart';
 
@@ -41,7 +42,7 @@ class MonitorControllerImpl implements MonitorController {
     } else if (report.systolicPressure! <= 90 &&
         report.diastolicPressure! <= 60) {
       msg +=
-          "\n${Texts.pressureTitle}  ${report.systolicPressure} x ${report.diastolicPressure} ${Texts.pressureMeasure}  (PRESSÃO BAIXA)\n";
+          "\n${Texts.pressureTitle}  ${report.systolicPressure} x ${report.diastolicPressure} ${Texts.pressureMeasure} (PRESSÃO BAIXA)\n";
     }
 
     if (report.bodyHeat! >= 39.5) {
@@ -131,7 +132,7 @@ class MonitorControllerImpl implements MonitorController {
       bpmAvg = sum ~/ history.length;
 
       CardiacHistory report = CardiacHistory(
-        userId: 1,
+        userId: UserSession.instance.user?.id,
         bpm: bpmAvg,
         systolicPressure: history.last.systolicPressure,
         diastolicPressure: history.last.diastolicPressure,

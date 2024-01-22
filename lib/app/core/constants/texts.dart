@@ -3,24 +3,27 @@ class Texts {
   static const String slogan = "cuidando do seu coração";
   static const String baseUrl = "https://api-dart.herokuapp.com";
 
-  static const String initialRoute = "/";
+  static const String loginRoute = "/";
+  static const String splashRoute = "splash";
   static const String monitorRoute = "monitor";
   static const String historyRoute = "history";
   static const String contactsRoute = "contacts";
 
+  // Drawer
+  static const String login = "Login";
   static const String monitor = "Monitor";
   static const String history = "Histórico";
   static const String contacts = "Contatos";
+  static const String years = "anos";
+  static const String logout = "Sair do app";
 
-  // Contacts
-  static const String unavailable = "Indisponível";
-  static const String loadingContacts = "Carregando seus contatos";
-  static const String contactsError =
-      "Não possível acessar a lista de contatos. Tente mais tarde.";
-  static const String contactsListException = "Falha ao carregar os contatos";
-  static const String deleteContactException = "Erro ao excluir o contato";
-  static const String loadContactsErrorMsg = "Erro ao carregar contatos!";
-  static const String deleteContactErrorMsg = "Erro ao deletar contato!";
+  // Login
+  static const String username = "Nome de usuário";
+  static const String password = "Senha";
+  static const String usernameMsg = "Insira seu nome de usuário!";
+  static const String passwordMsg = "Insira sua senha!";
+  static const String loginExceptionMsg = "Dados inválidos!";
+  static const String enter = "Entrar";
 
   // Monitor
   static const String measureBPM = "Medir BPM";
@@ -69,6 +72,16 @@ class Texts {
   static const String historyTimeFormat = "HH:mm";
   static const String saveHistorySuccessMsg = "Histórico salvo com sucesso!";
   static const String saveHistoryErrorMsg = "Erro ao salvar histórico!";
+
+  // Contacts
+  static const String unavailable = "Indisponível";
+  static const String loadingContacts = "Carregando seus contatos";
+  static const String contactsError =
+      "Não possível acessar a lista de contatos. Tente mais tarde.";
+  static const String contactsListException = "Falha ao carregar os contatos";
+  static const String deleteContactException = "Erro ao excluir o contato";
+  static const String loadContactsErrorMsg = "Erro ao carregar contatos!";
+  static const String deleteContactErrorMsg = "Erro ao deletar contato!";
 }
 
 class Fonts {

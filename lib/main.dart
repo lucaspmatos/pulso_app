@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: Texts.appTitle,
       theme: appTheme(),
-      initialRoute: Texts.initialRoute,
+      initialRoute: Texts.loginRoute,
       routes: Routes.mapRouter,
     );
   }

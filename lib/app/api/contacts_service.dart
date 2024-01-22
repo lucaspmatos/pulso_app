@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/login/model/user.dart';
 import 'package:pulso_app/app/features/contacts/model/contact.dart';
 
 class ContactService {
-  static const String apiUrl = '${Texts.baseUrl}/contacts/1';
-
   static Future<List<Contact>> getContacts() async {
+    final user = UserSession.instance.user;
+    String apiUrl = '${Texts.baseUrl}/contacts/${user?.id}';
+
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
