@@ -1,7 +1,10 @@
+import 'package:pulso_app/app/features/login/model/user.dart';
+
 class Texts {
   static const String appTitle = "PulsoApp";
   static const String slogan = "cuidando do seu coração";
   static const String baseUrl = "https://api-dart.herokuapp.com";
+  static const String refreshTopic = "refresh_pulso_app";
 
   static const String loginRoute = "/";
   static const String splashRoute = "splash";
@@ -18,12 +21,16 @@ class Texts {
   static const String logout = "Sair do app";
 
   // Login
+  static const String user = "user";
   static const String username = "Nome de usuário";
   static const String password = "Senha";
   static const String usernameMsg = "Insira seu nome de usuário!";
   static const String passwordMsg = "Insira sua senha!";
   static const String loginExceptionMsg = "Dados inválidos!";
   static const String enter = "Entrar";
+  static const String loginTopic = "login_pulso_app";
+  static const String logoutTopic = "logout_pulso_app";
+  static const String browserLoginMsg = "É preciso estar logado no celular para usar a versão web!";
 
   // Monitor
   static const String measureBPM = "Medir BPM";
@@ -43,7 +50,7 @@ class Texts {
   static const String clientIdentifier = "";
   static const String phone = "556281211293";
   static const String apiKey = "7075847";
-  static const String cardiacReport = "*RELATÓRIO CARDÍACO*\n";
+  static String cardiacReport = "*RELATÓRIO CARDÍACO*\n\nPaciente: ${UserSession.instance.user?.name}\n";
   static const String bpmTitle = "*BPM* (batimentos por minuto):";
   static const String pressureTitle = "*Pressão arterial*:";
   static const String tempTitle = "*Temperatura corporal*:";
@@ -64,7 +71,7 @@ class Texts {
   static const String temperature = "Temperatura";
   static const String loadingHistory = "Carregando seu histórico";
   static const String historyError =
-      "Não possível acessar o histórico. Tente mais tarde.";
+      "Histórico vazio ou inacessível. Tente mais tarde!";
   static const String historyListException = "Falha ao carregar o histórico";
   static const String postHistoryException = "Erro ao incluir histórico";
   static const String loadHistoryMsg = "Erro ao carregar histórico!";
@@ -72,6 +79,9 @@ class Texts {
   static const String historyTimeFormat = "HH:mm";
   static const String saveHistorySuccessMsg = "Histórico salvo com sucesso!";
   static const String saveHistoryErrorMsg = "Erro ao salvar histórico!";
+  static const String sendReport = "Enviar relatório";
+  static const String deleteHistory = "Deletar histórico";
+  static const String deleteHistoryErrorMsg = "Erro ao deletar histórico!";
 
   // Contacts
   static const String unavailable = "Indisponível";

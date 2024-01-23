@@ -34,6 +34,12 @@ class _LoginState extends State<Login> implements LoginView {
   void _goToSplashScreen() => Routes.splashScreenRoute(context);
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

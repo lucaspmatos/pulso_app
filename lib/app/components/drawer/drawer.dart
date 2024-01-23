@@ -11,8 +11,9 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width *
-          (kIsWeb ? Numbers.drawerWebWidth : Numbers.drawerAppWidth),
+      width: kIsWeb
+          ? Numbers.drawerWebSize
+          : MediaQuery.of(context).size.width * Numbers.drawerAppWidth,
       child: Drawer(
         child: SafeArea(
           child: SizedBox(
@@ -38,6 +39,7 @@ class AppDrawer extends StatelessWidget {
                   text: Texts.contacts,
                   onTap: () => Routes.contactsRoute(context),
                 ),
+                const Divider(color: ColorConstants.grey),
                 const Spacer(),
                 Divider(color: Colors.pinkAccent.shade200),
                 DrawerItem(
@@ -45,7 +47,9 @@ class AppDrawer extends StatelessWidget {
                   iconColor: Colors.pinkAccent.shade200,
                   text: Texts.logout,
                   textColor: Colors.pinkAccent.shade200,
-                  onTap: () => Routes.loginRoute(context),
+                  onTap: kIsWeb
+                      ? () => Routes.splashScreenRoute(context)
+                      : () => Routes.loginRoute(context),
                 ),
               ],
             ),

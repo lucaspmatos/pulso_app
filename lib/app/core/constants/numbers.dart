@@ -5,6 +5,7 @@ class Numbers {
   static const double two = 2;
   static const int three = 3;
   static const double four = 4;
+  static const double five = 5;
   static const double ten = 10;
   static const double fifteen = 15;
   static const double twenty = 20;
@@ -14,9 +15,8 @@ class Numbers {
   static const double hundred = 100;
 
   // Drawer
-  static const double drawerWebWidth = 0.2;
+  static const double drawerWebSize = 200;
   static const double drawerAppWidth = 0.6;
-  static const double drawerWebHeight = 0.1;
   static const double drawerAppHeight = 0.4;
 
   // Drawer App Bar
@@ -50,5 +50,6 @@ class Numbers {
   static const EdgeInsets heartbeatsContainerBottomMargin = EdgeInsets.only(bottom: 15);
 
   // Splash Screen
+  static const gravity = 9.7;
   static const heartIconSize = 90;
 }

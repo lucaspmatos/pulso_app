@@ -12,8 +12,9 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.width *
-          (kIsWeb ? Numbers.drawerWebHeight : Numbers.drawerAppHeight),
+      height: kIsWeb
+          ? Numbers.drawerWebSize
+          : MediaQuery.of(context).size.width * Numbers.drawerAppHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

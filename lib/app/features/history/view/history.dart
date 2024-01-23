@@ -37,26 +37,41 @@ class _HistoryState extends State<History> implements HistoryView {
 
   Widget _loadPage(List<CardiacHistory>? history) {
     if (history != null) {
-      return ListView.builder(
-        itemCount: history.length,
-        itemBuilder: (context, index) {
-          final historyItem = history[index];
-          if (history.isNotEmpty) {
+      if (history.isNotEmpty) {
+        return ListView.builder(
+          itemCount: history.length,
+          itemBuilder: (context, index) {
+            final historyItem = history[index];
             if (index == history.length - 1) {
               return Container(
                 margin: const EdgeInsets.only(bottom: Numbers.twenty),
-                child: MeasurementCard(historyItem),
+                child: MeasurementCard(
+                  historyItem,
+                  () => _controller.sendWhatsApp(historyItem),
+                  () => _controller.deleteHistory(historyItem.id!),
+                ),
               );
             }
-            return MeasurementCard(historyItem);
-          }
-          return const Center(
-            child: ListTile(
-              title: Text(Texts.historyError),
+            return MeasurementCard(
+              historyItem,
+              () => _controller.sendWhatsApp(historyItem),
+              () => _controller.deleteHistory(historyItem.id!),
+            );
+          },
+        );
+      } else {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.history,
+              size: Numbers.hundred,
+              color: Colors.pinkAccent.shade200,
             ),
-          );
-        },
-      );
+            const Text(Texts.historyError),
+          ],
+        );
+      }
     }
 
     return const Center(

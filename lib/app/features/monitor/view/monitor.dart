@@ -23,6 +23,7 @@ class Monitor extends StatefulWidget {
 
 class _MonitorState extends State<Monitor> implements MonitorView {
   List<SensorValue> data = [];
+  @override
   List<SensorValue> bpmValues = [];
   List<CardiacHistory> history = <CardiacHistory>[];
 

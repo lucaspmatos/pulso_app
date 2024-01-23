@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:pulso_app/app/router/routes.dart';
 import 'package:pulso_app/app/api/login_service.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+
 import 'package:pulso_app/app/features/login/model/user.dart';
 import 'package:pulso_app/app/features/login/contract/login_contract.dart';
 
@@ -30,6 +30,12 @@ class LoginControllerImpl implements LoginController {
       return Texts.passwordMsg;
     }
     return null;
+  }
+
+  @override
+  void dispose() {
+    usernameCtl.dispose();
+    passwordCtl.dispose();
   }
 
   @override

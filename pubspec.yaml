@@ -43,6 +43,8 @@ dependencies:
   google_fonts: ^6.1.0
   fluttertoast: ^8.2.4
   mqtt_client: ^10.0.1
+  sensors_plus: ^4.0.2
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

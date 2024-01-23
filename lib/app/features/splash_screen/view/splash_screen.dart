@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:pulso_app/app/router/routes.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
+
+import 'package:pulso_app/app/features/splash_screen/contract/splash_contract.dart';
+import 'package:pulso_app/app/features/splash_screen/controller/splash_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,14 +17,27 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> implements SplashView {
+  late final SplashController _controller;
+
+  _SplashScreenState() {
+    _controller = SplashControllerImpl(this);
+  }
+
+  @override
+  void goToMonitor() => Routes.monitorRoute(context);
+
   @override
   void initState() {
     super.initState();
-    Timer(
-      const Duration(seconds: Numbers.three),
-      () => Routes.monitorRoute(context),
-    );
+    if (!kIsWeb) {
+      Timer(
+        const Duration(seconds: Numbers.three),
+        () => Routes.monitorRoute(context),
+      );
+      return;
+    }
+    _controller.subscribeTopic();
   }
 
   @override
@@ -49,9 +66,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
             ),
             const SizedBox(height: Numbers.hundred),
-            CircularProgressIndicator(
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(Colors.pinkAccent.shade100),
+            Visibility(
+              visible: !kIsWeb,
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Colors.pinkAccent.shade100),
+              ),
             ),
           ],
         ),
