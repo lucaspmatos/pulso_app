@@ -24,7 +24,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<AccelerometerEvent> _accSub;
 
-  void _browserLogin() async {
+  void _browserLogin() {
     String userJson = jsonEncode(UserSession.instance.user);
     MqttHandler.publish(Texts.loginTopic, payload: userJson);
   }

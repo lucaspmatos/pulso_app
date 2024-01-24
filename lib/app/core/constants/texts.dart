@@ -80,7 +80,7 @@ class Texts {
   static const String saveHistorySuccessMsg = "Histórico salvo com sucesso!";
   static const String saveHistoryErrorMsg = "Erro ao salvar histórico!";
   static const String sendReport = "Enviar relatório";
-  static const String deleteHistory = "Deletar histórico";
+  static const String deleteHistory = "Deletar registro";
   static const String deleteHistoryErrorMsg = "Erro ao deletar histórico!";
 
   // Contacts

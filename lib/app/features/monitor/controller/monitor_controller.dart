@@ -114,6 +114,7 @@ class MonitorControllerImpl implements MonitorController {
       CardiacHistory report = CardiacHistory(
         userId: UserSession.instance.user?.id,
         bpm: bpmAvg,
+        bpmValues: _view.bpmValues,
         systolicPressure: history.last.systolicPressure,
         diastolicPressure: history.last.diastolicPressure,
         bodyHeat: history.last.bodyHeat,

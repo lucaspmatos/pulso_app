@@ -7,6 +7,7 @@ class Numbers {
   static const double four = 4;
   static const double five = 5;
   static const double ten = 10;
+  static const double fourteen = 14;
   static const double fifteen = 15;
   static const double twenty = 20;
   static const double twentyFive = 25;
@@ -16,7 +17,7 @@ class Numbers {
 
   // Drawer
   static const double drawerWebSize = 200;
-  static const double drawerAppWidth = 0.6;
+  static const double drawerAppWidth = 0.5;
   static const double drawerAppHeight = 0.4;
 
   // Drawer App Bar

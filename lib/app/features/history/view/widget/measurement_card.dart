@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:heart_bpm/chart.dart';
+import 'package:heart_bpm/heart_bpm.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -123,6 +125,7 @@ class MeasurementCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (kIsWeb && history.bpmValues != null) ...[_renderBPMChart()],
             if (!kIsWeb) ...[
               const Divider(color: ColorConstants.lightGrey),
               Row(
@@ -145,6 +148,7 @@ class MeasurementCard extends StatelessWidget {
                             Texts.sendReport,
                             style: getTextTheme(context).bodySmall?.copyWith(
                                   color: Colors.teal.shade700,
+                                  fontSize: Numbers.fourteen,
                                 ),
                           ),
                         ],
@@ -168,6 +172,7 @@ class MeasurementCard extends StatelessWidget {
                             Texts.deleteHistory,
                             style: getTextTheme(context).bodySmall?.copyWith(
                                   color: Colors.pinkAccent.shade200,
+                                  fontSize: Numbers.fourteen,
                                 ),
                           ),
                         ],
@@ -176,11 +181,42 @@ class MeasurementCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ]
+            ],
           ],
         ),
       ),
     );
+  }
+
+  Widget _renderBPMChart() {
+    List<SensorValue> chartList =
+        history.bpmValues!.map((e) => ParseSensor.fromJson(e)).toList();
+    return Column(
+        children: [
+          const SizedBox(height: Numbers.fifteen),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: ColorConstants.lightGrey,
+              ),
+              borderRadius: BorderRadius.circular(
+                Numbers.ten,
+              ),
+            ),
+            constraints: const BoxConstraints.expand(
+              height: Numbers.drawerWebSize,
+            ),
+            child: BPMChart(chartList),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(chartList.first.value.toString()),
+              Text(chartList.last.value.toString()),
+            ],
+          ),
+        ],
+      );
   }
 
   String _getDate(String givenDateTime) {

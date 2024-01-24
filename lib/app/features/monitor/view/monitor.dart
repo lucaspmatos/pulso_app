@@ -77,6 +77,12 @@ class _MonitorState extends State<Monitor> implements MonitorView {
     setState(() {
       _bpm = value;
       if (bpmValues.length >= 100) bpmValues.removeAt(0);
+      bpmValues.add(
+        SensorValue(
+          time: DateTime.now(),
+          value: _bpm.toDouble(),
+        ),
+      );
       _addHistory();
     });
   }
@@ -148,7 +154,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                         margin: Numbers.heartbeatsContainerBottomMargin,
                         decoration: BoxDecoration(
                           color: Colors.pinkAccent.shade700,
-                          borderRadius: BorderRadius.circular(Numbers.twentyFive),
+                          borderRadius:
+                              BorderRadius.circular(Numbers.twentyFive),
                         ),
                         child: Align(
                           alignment: Alignment.center,
@@ -156,9 +163,10 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                             title: Text(
                               Texts.heartbeats,
                               textAlign: TextAlign.center,
-                              style: getTextTheme(context).displaySmall?.copyWith(
-                                    color: ColorConstants.white,
-                                  ),
+                              style:
+                                  getTextTheme(context).displaySmall?.copyWith(
+                                        color: ColorConstants.white,
+                                      ),
                             ),
                             subtitle: Text(
                               _bpm.toString(),
@@ -178,7 +186,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.pinkAccent.shade400,
-                              borderRadius: BorderRadius.circular(Numbers.twentyFive),
+                              borderRadius:
+                                  BorderRadius.circular(Numbers.twentyFive),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -186,10 +195,11 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                                 Text(
                                   Texts.systolicPressure,
                                   textAlign: TextAlign.center,
-                                  style: getTextTheme(context).bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorConstants.white,
-                                      ),
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
                                 ),
                                 Text(
                                   _systolic,
@@ -198,10 +208,11 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                                 ),
                                 Text(
                                   Texts.pressureMeasure,
-                                  style: getTextTheme(context).bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorConstants.white,
-                                      ),
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -210,7 +221,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.pinkAccent.shade200,
-                              borderRadius: BorderRadius.circular(Numbers.twentyFive),
+                              borderRadius:
+                                  BorderRadius.circular(Numbers.twentyFive),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -218,10 +230,11 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                                 Text(
                                   Texts.diastolicPressure,
                                   textAlign: TextAlign.center,
-                                  style: getTextTheme(context).bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorConstants.white,
-                                      ),
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
                                 ),
                                 Text(
                                   _diastolic,
@@ -230,10 +243,11 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                                 ),
                                 Text(
                                   Texts.pressureMeasure,
-                                  style: getTextTheme(context).bodySmall?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ColorConstants.white,
-                                      ),
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
                                   textAlign: TextAlign.center,
                                 ),
                               ],
@@ -249,8 +263,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                         ),
                         alignment: Alignment.center,
                         child: ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: Numbers.fifteen),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: Numbers.fifteen),
                           title: Text(
                             Texts.bodyHeat,
                             style: getTextTheme(context).bodySmall?.copyWith(
@@ -272,12 +286,16 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                           ? Container(
                               margin: Numbers.chartDefaultMargin,
                               decoration: BoxDecoration(
-                                border: Border.all(),
+                                border: Border.all(
+                                  color: ColorConstants.lightGrey,
+                                ),
                                 borderRadius: BorderRadius.circular(
                                   Numbers.twentyFive,
                                 ),
                               ),
-                              constraints: const BoxConstraints.expand(height: 180),
+                              constraints: const BoxConstraints.expand(
+                                height: Numbers.drawerWebSize,
+                              ),
                               child: BPMChart(bpmValues),
                             )
                           : const SizedBox(),
@@ -299,8 +317,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                       Text(
                         isBPMEnabled ? Texts.stopMeasurement : Texts.measureBPM,
                         style: getTextTheme(context).bodyMedium?.copyWith(
-                          color: Colors.pinkAccent.shade200,
-                        ),
+                              color: Colors.pinkAccent.shade200,
+                            ),
                       ),
                     ],
                   ),
