@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:pulso_app/app/core/themes/themes.dart';
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
 
@@ -72,26 +74,55 @@ class _HistoryState extends State<History> implements HistoryView {
         return _errorWidget();
       } else if (snapshot.hasData) {
         history = snapshot.data;
-        return ListView.builder(
-          itemCount: history!.length,
-          itemBuilder: (context, index) {
-            final historyItem = history![index];
-            if (index == history!.length - 1) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: Numbers.twenty),
-                child: MeasurementCard(
-                  historyItem,
-                  () => _controller.sendWhatsApp(historyItem),
-                  () => _controller.deleteHistory(historyItem.id!),
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: history!.length,
+                itemBuilder: (context, index) {
+                  final historyItem = history![index];
+                  if (index == history!.length - 1) {
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: Numbers.twenty),
+                      child: MeasurementCard(
+                        historyItem,
+                        () => _controller.sendWhatsApp(historyItem),
+                        () => _controller.deleteHistory(historyItem.id!),
+                      ),
+                    );
+                  }
+                  return MeasurementCard(
+                    historyItem,
+                    () => _controller.sendWhatsApp(historyItem),
+                    () => _controller.deleteHistory(historyItem.id!),
+                  );
+                },
+              ),
+            ),
+            if (kIsWeb)...[
+              ElevatedButton(
+                onPressed: _controller.deleteAllHistory,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.heartCircleXmark,
+                      color: Colors.pinkAccent.shade200,
+                    ),
+                    const SizedBox(
+                      width: Numbers.ten,
+                    ),
+                    Text(
+                      Texts.deleteAllHistory,
+                      style: getTextTheme(context).bodyMedium?.copyWith(
+                        color: Colors.pinkAccent.shade200,
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            }
-            return MeasurementCard(
-              historyItem,
-              () => _controller.sendWhatsApp(historyItem),
-              () => _controller.deleteHistory(historyItem.id!),
-            );
-          },
+              ),
+            ]
+          ],
         );
       }
     }

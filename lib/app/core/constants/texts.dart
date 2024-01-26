@@ -31,9 +31,12 @@ class Texts {
   static const String enter = "Entrar";
   static const String loginTopic = "login_pulso_app";
   static const String logoutTopic = "logout_pulso_app";
-  static const String browserLoginMsg = "É preciso estar logado no celular para usar a versão web!";
+  static const String browserLoginMsg =
+      "É preciso estar logado no celular para usar a versão web!";
 
   // Monitor
+  static const String instruction =
+      "Coloque o dedo sob o flash e a câmera por 30 segundos para medir seus batimentos";
   static const String measureBPM = "Medir BPM";
   static const String stopMeasurement = "Parar medição";
   static const String heartbeats = "Batimentos cardíacos";
@@ -51,12 +54,14 @@ class Texts {
   static const String clientIdentifier = "";
   static const String phone = "556281211293";
   static const String apiKey = "7075847";
-  static String cardiacReport = "*RELATÓRIO CARDÍACO*\n\nPaciente: ${UserSession.instance.user?.name}\n";
+  static String cardiacReport =
+      "*RELATÓRIO CARDÍACO*\n\nPaciente: ${UserSession.instance.user?.name}\n";
   static const String bpmTitle = "*BPM* (batimentos por minuto):";
   static const String pressureTitle = "*Pressão arterial*:";
   static const String tempTitle = "*Temperatura corporal*:";
   static const String whatsAppMsgSuccess = "Relatório enviado com sucesso!";
-  static const String whatsAppMsgException = "Nâo foi possível enviar o relatório!";
+  static const String whatsAppMsgException =
+      "Nâo foi possível enviar o relatório!";
 
   static String whatsAppUrl(String phone, String text, String apiKey) =>
       "https://api.callmebot.com/whatsapp.php?phone=$phone&text=$text&apikey=$apiKey";
@@ -82,16 +87,24 @@ class Texts {
   static const String saveHistoryErrorMsg = "Erro ao salvar histórico!";
   static const String sendReport = "Enviar relatório";
   static const String deleteHistory = "Deletar registro";
+  static const String deleteAllHistory = "Deletar todo o histórico";
   static const String deleteHistoryErrorMsg = "Erro ao deletar histórico!";
 
   // Contacts
+  static const String name = "Nome";
+  static const String telephone = "Número de celular";
   static const String unavailable = "Indisponível";
+  static const String addContact = "Adicionar contato";
   static const String loadingContacts = "Carregando seus contatos";
+  static const String nameMsg = "Insira o nome de contato!";
+  static const String phoneMsg = "Insira um número de telefone!";
   static const String contactsError =
       "Lista de contatos vazia ou inacessível. Tente mais tarde!";
   static const String contactsListException = "Falha ao carregar os contatos";
   static const String deleteContactException = "Erro ao excluir o contato";
   static const String loadContactsErrorMsg = "Erro ao carregar contatos!";
+  static const String saveContactSuccessMsg = "Contato salvo com sucesso!";
+  static const String saveContactErrorMsg = "Erro ao salvar contato!";
   static const String deleteContactErrorMsg = "Erro ao deletar contato!";
 }
 

@@ -28,7 +28,7 @@ class Numbers {
 
   // Contacts
   static const double deleteContactIconSize = 25;
-  static const EdgeInsets contactsMargin = EdgeInsets.all(12.0);
+  static const EdgeInsets contactsMargin = EdgeInsets.fromLTRB(20, 0, 20, 15);
   static const EdgeInsets deleteContactButtonPadding = EdgeInsets.all(1.0);
 
   // History
@@ -48,7 +48,7 @@ class Numbers {
   static const double heartbeatsContainerHeight = 0.2;
   static const EdgeInsets monitorDefaultMargin = EdgeInsets.all(25);
   static const EdgeInsets chartDefaultMargin = EdgeInsets.symmetric(vertical: 25);
-  static const EdgeInsets heartbeatsContainerBottomMargin = EdgeInsets.only(bottom: 15);
+  static const EdgeInsets heartbeatsContainerVerticalMargin = EdgeInsets.symmetric(vertical: 15);
 
   // Splash Screen
   static const gravity = 9.7;

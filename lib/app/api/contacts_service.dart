@@ -20,6 +20,19 @@ class ContactService {
     }
   }
 
+  static Future<void> postContact(Contact contact) async {
+    final response = await http.post(
+      Uri.parse('${Texts.baseUrl}/contact'),
+      body: jsonEncode(contact.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(Texts.saveContactErrorMsg);
+    }
+  }
+
   static Future<void> deleteContact(int id) async {
     final response = await http.delete(Uri.parse('${Texts.baseUrl}/contact/$id'));
 

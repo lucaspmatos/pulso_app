@@ -20,6 +20,7 @@ class Contacts extends StatefulWidget {
 class _ContactsState extends State<Contacts> implements ContactsView {
   late final ContactsController _controller;
   List<Contact>? contacts;
+  final _formKey = GlobalKey<FormState>();
 
   _ContactsState() {
     _controller = ContactsControllerImpl(this);
@@ -32,7 +33,17 @@ class _ContactsState extends State<Contacts> implements ContactsView {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
   void reloadPage() => setState(() {});
+
+  void _addContact() async {
+    if (_formKey.currentState!.validate()) _controller.saveContact();
+  }
 
   Widget _errorWidget() {
     return Column(
@@ -73,44 +84,42 @@ class _ContactsState extends State<Contacts> implements ContactsView {
         return _errorWidget();
       } else if (snapshot.hasData) {
         contacts = snapshot.data;
-        return ListView.builder(
-          itemCount: contacts!.length,
-          itemBuilder: (context, index) {
-            final contact = contacts![index];
-            return Container(
-              margin: Numbers.contactsMargin,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    contact.name ?? Texts.unavailable,
-                    style: getTextTheme(context).headlineMedium,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        contact.phone ?? Texts.unavailable,
-                        style: getTextTheme(context).bodyMedium,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _controller.deleteContact(contact.id!);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: Numbers.deleteContactButtonPadding,
+        return Expanded(
+          child: ListView.builder(
+            itemCount: contacts!.length,
+            itemBuilder: (context, index) {
+              final contact = contacts![index];
+              return Container(
+                margin: Numbers.contactsMargin,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      contact.name ?? Texts.unavailable,
+                      style: getTextTheme(context).headlineMedium,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          contact.phone ?? Texts.unavailable,
+                          style: getTextTheme(context).bodyMedium,
                         ),
-                        child: const Icon(
-                          Icons.delete_forever_outlined,
-                          size: Numbers.deleteContactIconSize,
+                        const SizedBox(width: Numbers.ten),
+                        CircleAvatar(
+                          child: Icon(
+                            Icons.delete_forever_outlined,
+                            size: Numbers.deleteContactIconSize,
+                            color: Colors.pinkAccent.shade200,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       }
     }
@@ -130,9 +139,74 @@ class _ContactsState extends State<Contacts> implements ContactsView {
         child: SizedBox(
           width: MediaQuery.of(context).size.width *
               (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
-          child: FutureBuilder<List<Contact>?>(
-            future: _controller.loadContacts(),
-            builder: _loadPage,
+          child: Column(
+            children: [
+              Container(
+                margin: Numbers.contactsMargin,
+                height: Numbers.drawerWebSize,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextFormField(
+                              controller: _controller.nameCtl,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                getTextTheme(context).bodyMedium?.copyWith(
+                                  color: Colors.pinkAccent.shade200,
+                                ),
+                                labelText: Texts.name,
+                              ),
+                              validator: _controller.validateName,
+                            ),
+                            TextFormField(
+                              controller: _controller.phoneCtl,
+                              decoration: InputDecoration(
+                                labelStyle:
+                                getTextTheme(context).bodyMedium?.copyWith(
+                                  color: Colors.pinkAccent.shade200,
+                                ),
+                                labelText: Texts.telephone,
+                              ),
+                              validator: _controller.validatePhone,
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: _addContact,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.userPlus,
+                              color: Colors.pinkAccent.shade200,
+                            ),
+                            const SizedBox(
+                              width: Numbers.ten,
+                            ),
+                            Text(
+                              Texts.addContact,
+                              style: getTextTheme(context).bodyMedium?.copyWith(
+                                color: Colors.pinkAccent.shade200,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              FutureBuilder<List<Contact>?>(
+                future: _controller.loadContacts(),
+                builder: _loadPage,
+              ),
+            ],
           ),
         ),
       ),

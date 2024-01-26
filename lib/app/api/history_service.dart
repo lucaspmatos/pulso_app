@@ -44,4 +44,16 @@ class HistoryService {
       throw Exception(Texts.deleteHistoryErrorMsg);
     }
   }
+
+  static Future<void> deleteAllHistory(int userId) async {
+    final response = await http.delete(Uri.parse(
+      '${Texts.baseUrl}/cardiac_histories/$userId',
+    ));
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(Texts.deleteHistoryErrorMsg);
+    }
+  }
 }

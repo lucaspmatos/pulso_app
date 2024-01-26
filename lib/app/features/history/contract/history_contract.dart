@@ -6,6 +6,7 @@ abstract class HistoryView {
 
 abstract class HistoryController {
   void screenOpened();
+  void deleteAllHistory();
   void deleteHistory(int id);
   void sendWhatsApp(CardiacHistory report);
   Future<List<CardiacHistory>?> loadHistory();

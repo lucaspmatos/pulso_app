@@ -25,6 +25,17 @@ class HistoryControllerImpl implements HistoryController {
   }
 
   @override
+  void deleteAllHistory() async {
+    try {
+      final int userId = UserSession.instance.user!.id!;
+      await HistoryService.deleteAllHistory(userId)
+          .then((_) => MqttHandler.publish(Texts.refreshTopic));
+    } catch (e) {
+      Fluttertoast.showToast(msg: Texts.deleteHistoryErrorMsg);
+    }
+  }
+
+  @override
   void deleteHistory(int id) async {
     try {
       await HistoryService.deleteHistory(id)
