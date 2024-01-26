@@ -1,5 +1,5 @@
 abstract class SplashView {
-  void goToMonitor();
+  void callCurrentRoute(String routeName);
 }
 
 abstract class SplashController {

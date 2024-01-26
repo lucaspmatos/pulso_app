@@ -5,6 +5,7 @@ import 'package:pulso_app/app/api/history_service.dart';
 import 'package:pulso_app/app/broker/mqtt_handler.dart';
 
 import 'package:pulso_app/app/core/constants/constants.dart';
+import 'package:pulso_app/app/features/login/model/user.dart';
 import 'package:pulso_app/app/features/history/model/cardiac_history.dart';
 import 'package:pulso_app/app/features/history/contract/history_contract.dart';
 
@@ -13,17 +14,14 @@ class HistoryControllerImpl implements HistoryController {
   List<CardiacHistory> fetchedHistory = [];
   HistoryControllerImpl(this._view);
 
-  Future<void> _loadHistory() async {
-    try {
-       fetchedHistory = await HistoryService.getHistory();
-      _view.loadHistory(fetchedHistory);
-    } catch (e) {
-      Fluttertoast.showToast(msg: Texts.loadHistoryMsg);
-    }
+  void _changeSensorValue(String topic, String payload) {
+    if (topic == Texts.refreshTopic) _view.reloadPage();
   }
 
-  void _changeSensorValue(String topic, String payload) {
-    if (topic == Texts.refreshTopic) _loadHistory();
+  @override
+  void screenOpened() {
+    UserSession.instance.currentRoute = Texts.historyRoute;
+    MqttHandler.subscribe([Texts.refreshTopic], _changeSensorValue);
   }
 
   @override
@@ -49,8 +47,13 @@ class HistoryControllerImpl implements HistoryController {
   }
 
   @override
-  void screenOpened() {
-    MqttHandler.subscribe([Texts.refreshTopic], _changeSensorValue);
-    _loadHistory();
+  Future<List<CardiacHistory>?> loadHistory() async {
+    try {
+      fetchedHistory = await HistoryService.getHistory();
+      return fetchedHistory;
+    } catch (e) {
+      Fluttertoast.showToast(msg: Texts.loadHistoryMsg);
+      return null;
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -25,8 +26,16 @@ class _MyAppState extends State<MyApp> {
   late StreamSubscription<AccelerometerEvent> _accSub;
 
   void _browserLogin() {
-    String userJson = jsonEncode(UserSession.instance.user);
-    MqttHandler.publish(Texts.loginTopic, payload: userJson);
+    final user = UserSession.instance.user;
+    if (user != null) {
+      Map userJson = user.toJson();
+      userJson.putIfAbsent(
+          Texts.currentRoute, () => UserSession.instance.currentRoute);
+      String userStr = jsonEncode(userJson);
+      MqttHandler.publish(Texts.loginTopic, payload: userStr);
+      return;
+    }
+    Fluttertoast.showToast(msg: Texts.browserLoginMsg);
   }
 
   void _handleAccelerometerEvent() {

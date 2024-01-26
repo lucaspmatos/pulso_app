@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:pulso_app/app/broker/mqtt_handler.dart';
 import 'package:pulso_app/app/core/constants/constants.dart';
 
@@ -13,8 +12,11 @@ class SplashControllerImpl implements SplashController {
 
   _changeSensorValue(String topic, String payload) {
     if (topic == Texts.loginTopic) {
-      UserSession.instance.user = User.fromJson(jsonDecode(payload));
-      _view.goToMonitor();
+      final userPayload = jsonDecode(payload);
+      UserSession.instance.user = User.fromJson(userPayload);
+      if (userPayload[Texts.currentRoute] != null) {
+        _view.callCurrentRoute(userPayload[Texts.currentRoute]);
+      }
     }
   }
 

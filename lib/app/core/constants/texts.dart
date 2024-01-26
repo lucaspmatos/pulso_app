@@ -24,6 +24,7 @@ class Texts {
   static const String user = "user";
   static const String username = "Nome de usuário";
   static const String password = "Senha";
+  static const String currentRoute = "current_route";
   static const String usernameMsg = "Insira seu nome de usuário!";
   static const String passwordMsg = "Insira sua senha!";
   static const String loginExceptionMsg = "Dados inválidos!";
@@ -87,7 +88,7 @@ class Texts {
   static const String unavailable = "Indisponível";
   static const String loadingContacts = "Carregando seus contatos";
   static const String contactsError =
-      "Não possível acessar a lista de contatos. Tente mais tarde.";
+      "Lista de contatos vazia ou inacessível. Tente mais tarde!";
   static const String contactsListException = "Falha ao carregar os contatos";
   static const String deleteContactException = "Erro ao excluir o contato";
   static const String loadContactsErrorMsg = "Erro ao carregar contatos!";

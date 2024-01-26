@@ -86,21 +86,25 @@ class MonitorControllerImpl implements MonitorController {
 
   void _saveHistory(CardiacHistory newHistory) async {
     try {
-      await HistoryService.postHistory(newHistory);
+      await HistoryService.postHistory(newHistory)
+          .then((_) => MqttHandler.publish(Texts.refreshTopic));
       Fluttertoast.showToast(msg: Texts.saveHistorySuccessMsg);
     } catch (e) {
       Fluttertoast.showToast(msg: Texts.saveHistoryErrorMsg);
     }
   }
 
-  @override
-  void subscribeTopics() => MqttHandler.subscribe(topics, _changeSensorValues);
+@override
+  void screenOpened() => UserSession.instance.currentRoute = Texts.monitorRoute;
 
   @override
   void stopMeasurement() {
     MqttHandler.client.disconnect();
     _view.setButtonValue();
   }
+
+  @override
+  void subscribeTopics() => MqttHandler.subscribe(topics, _changeSensorValues);
 
   @override
   void calcHistory(List<CardiacHistory> history) {

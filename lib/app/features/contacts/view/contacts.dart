@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:pulso_app/app/components/components.dart';
 import 'package:pulso_app/app/core/themes/text_theme.dart';
@@ -31,17 +32,51 @@ class _ContactsState extends State<Contacts> implements ContactsView {
   }
 
   @override
-  void loadContacts(List<Contact> contactsList) {
-    setState(() => contacts = contactsList);
+  void reloadPage() => setState(() {});
+
+  Widget _errorWidget() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          FontAwesomeIcons.userXmark,
+          size: Numbers.hundred,
+          color: Colors.pinkAccent.shade200,
+        ),
+        const Text(Texts.contactsError),
+      ],
+    );
   }
 
-  Widget _loadPage(List<Contact>? contacts) {
-    if (contacts != null) {
-      return ListView.builder(
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-          final contact = contacts[index];
-          if (contacts.isNotEmpty) {
+  Widget _loadPage(
+    BuildContext context,
+    AsyncSnapshot<List<Contact>?> snapshot,
+  ) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            Text(
+              Texts.loadingContacts,
+              style: TextStyle(
+                height: Numbers.four,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    if (snapshot.connectionState == ConnectionState.done) {
+      if (snapshot.hasError) {
+        return _errorWidget();
+      } else if (snapshot.hasData) {
+        contacts = snapshot.data;
+        return ListView.builder(
+          itemCount: contacts!.length,
+          itemBuilder: (context, index) {
+            final contact = contacts![index];
             return Container(
               margin: Numbers.contactsMargin,
               child: Row(
@@ -75,30 +110,11 @@ class _ContactsState extends State<Contacts> implements ContactsView {
                 ],
               ),
             );
-          }
-          return const Center(
-            child: ListTile(
-              title: Text(Texts.contactsError),
-            ),
-          );
-        },
-      );
+          },
+        );
+      }
     }
-
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          Text(
-            Texts.loadingContacts,
-            style: TextStyle(
-              height: Numbers.four,
-            ),
-          ),
-        ],
-      ),
-    );
+    return _errorWidget();
   }
 
   @override
@@ -114,7 +130,10 @@ class _ContactsState extends State<Contacts> implements ContactsView {
         child: SizedBox(
           width: MediaQuery.of(context).size.width *
               (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
-          child: _loadPage(contacts),
+          child: FutureBuilder<List<Contact>?>(
+            future: _controller.loadContacts(),
+            builder: _loadPage,
+          ),
         ),
       ),
     );

@@ -25,7 +25,9 @@ class _SplashScreenState extends State<SplashScreen> implements SplashView {
   }
 
   @override
-  void goToMonitor() => Routes.monitorRoute(context);
+  void callCurrentRoute(String routeName) {
+    Navigator.pushReplacementNamed(context, routeName);
+  }
 
   @override
   void initState() {

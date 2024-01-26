@@ -31,18 +31,52 @@ class _HistoryState extends State<History> implements HistoryView {
   }
 
   @override
-  void loadHistory(List<CardiacHistory> historyList) {
-    setState(() => history = historyList);
+  void reloadPage() => setState(() {});
+
+  Widget _errorWidget() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.history,
+          size: Numbers.hundred,
+          color: Colors.pinkAccent.shade200,
+        ),
+        const Text(Texts.historyError),
+      ],
+    );
   }
 
-  Widget _loadPage(List<CardiacHistory>? history) {
-    if (history != null) {
-      if (history.isNotEmpty) {
+  Widget _loadPage(
+    BuildContext context,
+    AsyncSnapshot<List<CardiacHistory>?> snapshot,
+  ) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: Colors.pinkAccent.shade200,
+            ),
+            const Text(
+              Texts.loadingHistory,
+              style: TextStyle(height: Numbers.four),
+            ),
+          ],
+        ),
+      );
+    }
+    if (snapshot.connectionState == ConnectionState.done) {
+      if (snapshot.hasError) {
+        return _errorWidget();
+      } else if (snapshot.hasData) {
+        history = snapshot.data;
         return ListView.builder(
-          itemCount: history.length,
+          itemCount: history!.length,
           itemBuilder: (context, index) {
-            final historyItem = history[index];
-            if (index == history.length - 1) {
+            final historyItem = history![index];
+            if (index == history!.length - 1) {
               return Container(
                 margin: const EdgeInsets.only(bottom: Numbers.twenty),
                 child: MeasurementCard(
@@ -59,33 +93,9 @@ class _HistoryState extends State<History> implements HistoryView {
             );
           },
         );
-      } else {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.history,
-              size: Numbers.hundred,
-              color: Colors.pinkAccent.shade200,
-            ),
-            const Text(Texts.historyError),
-          ],
-        );
       }
     }
-
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          Text(
-            Texts.loadingHistory,
-            style: TextStyle(height: Numbers.four),
-          ),
-        ],
-      ),
-    );
+    return _errorWidget();
   }
 
   @override
@@ -101,7 +111,10 @@ class _HistoryState extends State<History> implements HistoryView {
         child: SizedBox(
           width: MediaQuery.of(context).size.width *
               (kIsWeb ? Numbers.monitorWebWidth : Numbers.monitorAppWidth),
-          child: _loadPage(history),
+          child: FutureBuilder<List<CardiacHistory>?>(
+            future: _controller.loadHistory(),
+            builder: _loadPage,
+          ),
         ),
       ),
     );

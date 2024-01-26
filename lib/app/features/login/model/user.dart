@@ -25,6 +25,7 @@ class User {
 
 class UserSession {
   User? user;
+  String currentRoute = '';
   static UserSession? _instance;
 
   static UserSession get instance {

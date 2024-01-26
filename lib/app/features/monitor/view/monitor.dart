@@ -117,6 +117,8 @@ class _MonitorState extends State<Monitor> implements MonitorView {
             fontSize: fontSize,
           );
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

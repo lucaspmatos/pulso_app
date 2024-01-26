@@ -11,6 +11,7 @@ abstract class MonitorView {
 }
 
 abstract class MonitorController {
+  void screenOpened();
   void stopMeasurement();
   void subscribeTopics();
   void calcHistory(List<CardiacHistory> history);
