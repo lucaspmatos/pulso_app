@@ -123,8 +123,10 @@ class MonitorControllerImpl implements MonitorController {
         diastolicPressure: history.last.diastolicPressure,
         bodyHeat: history.last.bodyHeat,
       );
+
       _saveHistory(report);
       _sendWhatsApp(report);
+      _view.bpmValues.clear();
     }
   }
 }

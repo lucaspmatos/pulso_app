@@ -118,6 +118,12 @@ class _MonitorState extends State<Monitor> implements MonitorView {
           );
 
   @override
+  void initState() {
+    super.initState();
+    _controller.screenOpened();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
