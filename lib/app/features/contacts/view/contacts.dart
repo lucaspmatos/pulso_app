@@ -106,11 +106,14 @@ class _ContactsState extends State<Contacts> implements ContactsView {
                           style: getTextTheme(context).bodyMedium,
                         ),
                         const SizedBox(width: Numbers.ten),
-                        CircleAvatar(
-                          child: Icon(
-                            Icons.delete_forever_outlined,
-                            size: Numbers.deleteContactIconSize,
-                            color: Colors.pinkAccent.shade200,
+                        InkWell(
+                          onTap: () => _controller.deleteContact(contact.id!),
+                          child: CircleAvatar(
+                            child: Icon(
+                              Icons.delete_forever_outlined,
+                              size: Numbers.deleteContactIconSize,
+                              color: Colors.pinkAccent.shade200,
+                            ),
                           ),
                         ),
                       ],

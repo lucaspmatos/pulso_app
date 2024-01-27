@@ -135,176 +135,178 @@ class _MonitorState extends State<Monitor> implements MonitorView {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ListView(
-                  shrinkWrap: true,
-                  children: [
-                    isBPMEnabled && !kIsWeb
-                        ? HeartBPMDialog(
-                            context: context,
-                            cameraWidgetWidth: Numbers.zero,
-                            cameraWidgetHeight: Numbers.zero,
-                            onRawData: _treatData,
-                            onBPM: _treatBPM,
-                          )
-                        : const SizedBox(),
-                    Text(
-                      Texts.instruction,
-                      textAlign: TextAlign.justify,
-                      style: getTextTheme(context).bodyMedium?.copyWith(
-                            color: Colors.grey.shade700,
-                          ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height *
-                          Numbers.heartbeatsContainerHeight,
-                      margin: Numbers.heartbeatsContainerVerticalMargin,
-                      decoration: BoxDecoration(
-                        color: Colors.pinkAccent.shade700,
-                        borderRadius: BorderRadius.circular(Numbers.twentyFive),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      isBPMEnabled && !kIsWeb
+                          ? HeartBPMDialog(
+                              context: context,
+                              cameraWidgetWidth: Numbers.zero,
+                              cameraWidgetHeight: Numbers.zero,
+                              onRawData: _treatData,
+                              onBPM: _treatBPM,
+                            )
+                          : const SizedBox(),
+                      Text(
+                        Texts.instruction,
+                        textAlign: TextAlign.justify,
+                        style: getTextTheme(context).bodyMedium?.copyWith(
+                              color: Colors.grey.shade700,
+                            ),
                       ),
-                      child: Align(
+                      Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height *
+                            Numbers.heartbeatsContainerHeight,
+                        margin: Numbers.heartbeatsContainerVerticalMargin,
+                        decoration: BoxDecoration(
+                          color: Colors.pinkAccent.shade700,
+                          borderRadius: BorderRadius.circular(Numbers.twentyFive),
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: ListTile(
+                            title: Text(
+                              Texts.heartbeats,
+                              textAlign: TextAlign.center,
+                              style: getTextTheme(context).displaySmall?.copyWith(
+                                    color: ColorConstants.white,
+                                  ),
+                            ),
+                            subtitle: Text(
+                              _bpm.toString(),
+                              style: _getTextStyleCard(Numbers.fifty),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                      GridView.count(
+                        crossAxisCount: Numbers.two.toInt(),
+                        crossAxisSpacing: Numbers.fifteen,
+                        shrinkWrap: true,
+                        childAspectRatio: Numbers.gridViewAspectRatio,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.pinkAccent.shade400,
+                              borderRadius:
+                                  BorderRadius.circular(Numbers.twentyFive),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  Texts.systolicPressure,
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
+                                ),
+                                Text(
+                                  _systolic,
+                                  style: _getTextStyleCard(Numbers.fourty),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  Texts.pressureMeasure,
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.pinkAccent.shade200,
+                              borderRadius:
+                                  BorderRadius.circular(Numbers.twentyFive),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  Texts.diastolicPressure,
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
+                                ),
+                                Text(
+                                  _diastolic,
+                                  style: _getTextStyleCard(Numbers.fourty),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  Texts.pressureMeasure,
+                                  style:
+                                      getTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorConstants.white,
+                                          ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: Numbers.fifteen),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent.shade200,
+                          borderRadius: BorderRadius.circular(Numbers.fifteen),
+                        ),
                         alignment: Alignment.center,
                         child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: Numbers.fifteen),
                           title: Text(
-                            Texts.heartbeats,
-                            textAlign: TextAlign.center,
-                            style: getTextTheme(context).displaySmall?.copyWith(
+                            Texts.bodyHeat,
+                            style: getTextTheme(context).bodySmall?.copyWith(
                                   color: ColorConstants.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          subtitle: Text(
-                            _bpm.toString(),
-                            style: _getTextStyleCard(Numbers.fifty),
-                            textAlign: TextAlign.center,
+                          trailing: Text(
+                            "$_bodyHeat${Texts.celsius}",
+                            style: getTextTheme(context).displayLarge?.copyWith(
+                                  color: ColorConstants.white,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 25,
+                                ),
                           ),
                         ),
                       ),
-                    ),
-                    GridView.count(
-                      crossAxisCount: Numbers.two.toInt(),
-                      crossAxisSpacing: Numbers.fifteen,
-                      shrinkWrap: true,
-                      childAspectRatio: Numbers.gridViewAspectRatio,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.pinkAccent.shade400,
-                            borderRadius:
-                                BorderRadius.circular(Numbers.twentyFive),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                Texts.systolicPressure,
-                                textAlign: TextAlign.center,
-                                style:
-                                    getTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorConstants.white,
-                                        ),
+                      kIsWeb && bpmValues.isNotEmpty
+                          ? Container(
+                              margin: Numbers.chartDefaultMargin,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: ColorConstants.lightGrey,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Numbers.twentyFive,
+                                ),
                               ),
-                              Text(
-                                _systolic,
-                                style: _getTextStyleCard(Numbers.fourty),
-                                textAlign: TextAlign.center,
+                              constraints: const BoxConstraints.expand(
+                                height: Numbers.drawerWebSize,
                               ),
-                              Text(
-                                Texts.pressureMeasure,
-                                style:
-                                    getTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorConstants.white,
-                                        ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.pinkAccent.shade200,
-                            borderRadius:
-                                BorderRadius.circular(Numbers.twentyFive),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                Texts.diastolicPressure,
-                                textAlign: TextAlign.center,
-                                style:
-                                    getTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorConstants.white,
-                                        ),
-                              ),
-                              Text(
-                                _diastolic,
-                                style: _getTextStyleCard(Numbers.fourty),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                Texts.pressureMeasure,
-                                style:
-                                    getTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: ColorConstants.white,
-                                        ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: Numbers.fifteen),
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent.shade200,
-                        borderRadius: BorderRadius.circular(Numbers.fifteen),
-                      ),
-                      alignment: Alignment.center,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: Numbers.fifteen),
-                        title: Text(
-                          Texts.bodyHeat,
-                          style: getTextTheme(context).bodySmall?.copyWith(
-                                color: ColorConstants.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        trailing: Text(
-                          "$_bodyHeat${Texts.celsius}",
-                          style: getTextTheme(context).displayLarge?.copyWith(
-                                color: ColorConstants.white,
-                                fontWeight: FontWeight.w100,
-                                fontSize: 25,
-                              ),
-                        ),
-                      ),
-                    ),
-                    kIsWeb && bpmValues.isNotEmpty
-                        ? Container(
-                            margin: Numbers.chartDefaultMargin,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: ColorConstants.lightGrey,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                Numbers.twentyFive,
-                              ),
-                            ),
-                            constraints: const BoxConstraints.expand(
-                              height: Numbers.drawerWebSize,
-                            ),
-                            child: BPMChart(bpmValues),
-                          )
-                        : const SizedBox(),
-                  ],
+                              child: BPMChart(bpmValues),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: Numbers.ten,
