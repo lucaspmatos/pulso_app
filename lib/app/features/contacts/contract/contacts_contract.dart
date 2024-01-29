@@ -12,6 +12,7 @@ abstract class ContactsController {
   void dispose();
   void saveContact();
   void screenOpened();
+  void deleteAllContacts();
   void deleteContact(int id);
   String? validateName(String? value);
   String? validatePhone(String? value);

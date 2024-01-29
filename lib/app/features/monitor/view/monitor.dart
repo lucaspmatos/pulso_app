@@ -154,12 +154,15 @@ class _MonitorState extends State<Monitor> implements MonitorView {
                               onBPM: _treatBPM,
                             )
                           : const SizedBox(),
-                      Text(
-                        Texts.instruction,
-                        textAlign: TextAlign.justify,
-                        style: getTextTheme(context).bodyMedium?.copyWith(
-                              color: Colors.grey.shade700,
-                            ),
+                      Visibility(
+                        visible: !kIsWeb,
+                        child: Text(
+                          Texts.instruction,
+                          textAlign: TextAlign.justify,
+                          style: getTextTheme(context).bodyMedium?.copyWith(
+                                color: Colors.grey.shade700,
+                              ),
+                        ),
                       ),
                       Container(
                         width: double.infinity,

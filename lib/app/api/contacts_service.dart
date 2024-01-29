@@ -42,4 +42,16 @@ class ContactService {
       throw Exception(Texts.deleteContactException);
     }
   }
+
+  static Future<void> deleteAllContacts(int userId) async {
+    final response = await http.delete(Uri.parse(
+      '${Texts.baseUrl}/contacts/$userId',
+    ));
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      throw Exception(Texts.deleteHistoryErrorMsg);
+    }
+  }
 }

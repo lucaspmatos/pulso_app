@@ -100,25 +100,31 @@ class _HistoryState extends State<History> implements HistoryView {
               ),
             ),
             if (kIsWeb)...[
-              ElevatedButton(
-                onPressed: _controller.deleteAllHistory,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.heartCircleXmark,
-                      color: Colors.pinkAccent.shade200,
+              Container(
+                color: ColorConstants.white,
+                child: Padding(
+                  padding: Numbers.measurementCardPadding,
+                  child: ElevatedButton(
+                    onPressed: _controller.deleteAllHistory,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          FontAwesomeIcons.heartCircleXmark,
+                          color: Colors.redAccent,
+                        ),
+                        const SizedBox(
+                          width: Numbers.ten,
+                        ),
+                        Text(
+                          Texts.deleteAllHistory,
+                          style: getTextTheme(context).bodyMedium?.copyWith(
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      width: Numbers.ten,
-                    ),
-                    Text(
-                      Texts.deleteAllHistory,
-                      style: getTextTheme(context).bodyMedium?.copyWith(
-                        color: Colors.pinkAccent.shade200,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ]

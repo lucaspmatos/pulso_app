@@ -67,6 +67,17 @@ class ContactsControllerImpl implements ContactsController {
   }
 
   @override
+  void deleteAllContacts() async {
+    try {
+      final int userId = UserSession.instance.user!.id!;
+      await ContactService.deleteAllContacts(userId)
+          .then((_) => MqttHandler.publish(Texts.refreshTopic));
+    } catch (e) {
+      Fluttertoast.showToast(msg: Texts.deleteContactListErrorMsg);
+    }
+  }
+
+  @override
   void deleteContact(int id) async {
     try {
       await ContactService.deleteContact(id)

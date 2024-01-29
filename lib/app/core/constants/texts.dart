@@ -105,7 +105,9 @@ class Texts {
   static const String loadContactsErrorMsg = "Erro ao carregar contatos!";
   static const String saveContactSuccessMsg = "Contato salvo com sucesso!";
   static const String saveContactErrorMsg = "Erro ao salvar contato!";
+  static const String deleteAllContacts = "Deletar todos os contatos";
   static const String deleteContactErrorMsg = "Erro ao deletar contato!";
+  static const String deleteContactListErrorMsg = "Erro ao deletar lista de contatos!";
 }
 
 class Fonts {
